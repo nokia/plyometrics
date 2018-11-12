@@ -2,14 +2,10 @@
 #include "nbench/random.hpp"
 #include <memory>
 
-void escape(void* p)
-{
-    asm volatile("" : : "g"(p) : "memory");
-}
-
-
 int main()
 {
+    using namespace nbench;
+
     nbench::benchmark([](nbench::loop& loop)
     {
         while (loop)
