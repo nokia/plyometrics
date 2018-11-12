@@ -2,6 +2,8 @@
 #include <functional>
 #include <chrono>
 #include <iostream>
+#include <random>
+#include <algorithm>
 
 namespace nbench
 {
@@ -63,6 +65,15 @@ void exponential_benchmark(F&& f, std::size_t start = 1, std::size_t end = 1e5)
         f(l, i);
         std::cout << l.iteration_time() << std::endl;
     }
+}
+
+auto generate_random_data(std::size_t size)
+{
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    std::vector<int> c(size);
+    std::generate(c.begin(), c.end(), rng);
+    return c;
 }
 
 }
