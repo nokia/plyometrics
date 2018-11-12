@@ -28,7 +28,7 @@ int main()
     });
 
 
-    nbench::exponential_benchmark([](nbench::loop& loop, auto i)
+    nbench::exponential_benchmark("some exponential benchmark", [](nbench::loop& loop, auto i)
     {
         auto data = nbench::generate_random_data(i);
         //std::cout << data.size() << std::endl;

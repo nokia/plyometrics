@@ -57,13 +57,13 @@ void benchmark(F&& f)
 }
 
 template<class F>
-void exponential_benchmark(F&& f, std::size_t start = 1, std::size_t end = 1e5)
+void exponential_benchmark(const std::string& name, F&& f, std::size_t start = 1, std::size_t end = 1e5)
 {
     for (int i = start; i < end; i *= 2)
     {
         loop l;
         f(l, i);
-        std::cout << l.iteration_time() << std::endl;
+        std::cout << name << "[" << i << "]: " << l.iteration_time() << std::endl;
     }
 }
 
