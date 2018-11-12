@@ -30,9 +30,7 @@ struct loop
     {
         _end = clock::now();
         _iterations++;
-        if (_end - _start > std::chrono::seconds{2})
-            return false;
-        return true;
+        return _end - _start < std::chrono::seconds{2};
     }
 
     auto iteration_time() const
