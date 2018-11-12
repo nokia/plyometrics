@@ -19,6 +19,12 @@ struct random_range
 
     struct const_iterator
     {
+        using difference_type = std::size_t;
+        using value_type = int;
+        using pointer = int*;
+        using reference = int&;
+        using iterator_category = std::forward_iterator_tag;
+
         const_iterator(engine& e) : _engine(&e), _index(0)
         {
             _value = e();

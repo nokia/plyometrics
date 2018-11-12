@@ -29,11 +29,14 @@ int main()
     });
 
 
-    nbench::exponential_benchmark("some exponential benchmark", [](nbench::loop& loop, auto i)
+    nbench::exponential_benchmark("some exponential benchmark", [](nbench::loop& loop, auto n)
     {
-        auto data = nbench::random_range(i);
+        auto data = nbench::random_range(n);
+        std::vector<int> v;
+        std::copy(data.begin(), data.end(), std::back_inserter(v));
+
         //std::cout << data.size() << std::endl;
-        for (auto i : data)
+        for (auto i : v)
         {
             std::cout << i << " ";
         }
@@ -41,7 +44,6 @@ int main()
 
         while (loop)
         {
-        auto data = nbench::generate_random_data(i);
             auto p = std::make_unique<int>(5);
             escape(p.get());
         }
