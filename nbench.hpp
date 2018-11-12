@@ -24,7 +24,6 @@ auto humanize(std::chrono::duration<Rep, Period> time)
     return humanized_time<Rep, Period>{time};
 }
 
-
 struct loop
 {
     operator bool()
@@ -54,7 +53,7 @@ void benchmark(F&& f)
 {
     loop l;
     f(l);
-    std::cout << l.iteration_time() << "ns" << std::endl;
+    std::cout << l.iteration_time() << std::endl;
 }
 
 template<class F>
@@ -64,7 +63,7 @@ void exponential_benchmark(F&& f, std::size_t start = 1, std::size_t end = 1e5)
     {
         loop l;
         f(l, i);
-        std::cout << l.iteration_time() << "ns" << std::endl;
+        std::cout << l.iteration_time() << std::endl;
     }
 }
 
