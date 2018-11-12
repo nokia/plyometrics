@@ -8,6 +8,10 @@
 namespace nbench
 {
 
+#ifndef __OPTIMIZE__
+    #warning debug
+#endif
+
 template<class Rep, class Period>
 struct humanized_time
 {
