@@ -28,24 +28,16 @@ int main()
         }
     });
 
-
-    nbench::exponential_benchmark("some exponential benchmark", [](nbench::loop& loop, auto n)
+    nbench::exponential_benchmark("sorting a std::vector", [](nbench::loop& loop, auto n)
     {
         auto data = nbench::random_range(n);
         std::vector<int> v;
         std::copy(data.begin(), data.end(), std::back_inserter(v));
 
-        //std::cout << data.size() << std::endl;
-        for (auto i : v)
-        {
-            std::cout << i << " ";
-        }
-        std::cout << std::endl;
-
         while (loop)
         {
-            auto p = std::make_unique<int>(5);
-            escape(p.get());
+            std::sort(v.begin(), v.end());
+            escape(v.data());
         }
     });
 
