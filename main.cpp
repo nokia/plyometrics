@@ -1,4 +1,4 @@
-#include "nbench.hpp"
+#include "nbench/nbench.hpp"
 #include "nbench/random.hpp"
 #include <memory>
 
