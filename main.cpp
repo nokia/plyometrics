@@ -1,4 +1,5 @@
 #include "nbench.hpp"
+#include "nbench/random.hpp"
 #include <memory>
 
 void escape(void* p)
@@ -30,13 +31,13 @@ int main()
 
     nbench::exponential_benchmark("some exponential benchmark", [](nbench::loop& loop, auto i)
     {
-        auto data = nbench::generate_random_data(i);
+        auto data = nbench::random_range(i);
         //std::cout << data.size() << std::endl;
-        //for (auto i : data)
-        //{
-        //    std::cout << i << " ";
-        //}
-        //std::cout << std::endl;
+        for (auto i : data)
+        {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
 
         while (loop)
         {
