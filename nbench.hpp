@@ -6,6 +6,25 @@
 namespace nbench
 {
 
+template<class Rep, class Period>
+struct humanized_time
+{
+    std::chrono::duration<Rep, Period> _time;
+};
+
+template<class Rep, class Period>
+std::ostream& operator<<(std::ostream& os, humanized_time<Rep, Period> t)
+{
+    return os << std::chrono::duration_cast<std::chrono::nanoseconds>(t._time).count() << "ns";
+}
+
+template<class Rep, class Period>
+auto humanize(std::chrono::duration<Rep, Period> time)
+{
+    return humanized_time<Rep, Period>{time};
+}
+
+
 struct loop
 {
     operator bool()
@@ -19,7 +38,7 @@ struct loop
 
     auto iteration_time() const
     {
-        return (_end - _start) / _iterations;
+        return humanize((_end - _start) / _iterations);
     }
 
 private:
@@ -35,7 +54,18 @@ void benchmark(F&& f)
 {
     loop l;
     f(l);
-    std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(l.iteration_time()).count() << "ns" << std::endl;
+    std::cout << l.iteration_time() << "ns" << std::endl;
+}
+
+template<class F>
+void exponential_benchmark(F&& f, std::size_t start = 1, std::size_t end = 1e5)
+{
+    for (int i = start; i < end; i *= 2)
+    {
+        loop l;
+        f(l, i);
+        std::cout << l.iteration_time() << "ns" << std::endl;
+    }
 }
 
 }

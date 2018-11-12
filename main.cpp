@@ -9,23 +9,32 @@ void escape(void* p)
 
 int main()
 {
-
-nbench::benchmark([](nbench::loop& loop)
-{
-    while (loop)
+    nbench::benchmark([](nbench::loop& loop)
     {
-        auto p = std::make_shared<int>(5);
-        escape(p.get());
-    }
-});
+        while (loop)
+        {
+            auto p = std::make_shared<int>(5);
+            escape(p.get());
+        }
+    });
 
-nbench::benchmark([](nbench::loop& loop)
-{
-    while (loop)
+    nbench::benchmark([](nbench::loop& loop)
     {
-        auto p = std::make_unique<int>(5);
-        escape(p.get());
-    }
-});
+        while (loop)
+        {
+            auto p = std::make_unique<int>(5);
+            escape(p.get());
+        }
+    });
+
+
+    nbench::exponential_benchmark([](nbench::loop& loop, auto i)
+    {
+        while (loop)
+        {
+            auto p = std::make_unique<int>(5);
+            escape(p.get());
+        }
+    });
 
 }
