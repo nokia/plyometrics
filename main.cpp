@@ -1,6 +1,8 @@
 #include "nbench/nbench.hpp"
 #include "nbench/random.hpp"
 #include <memory>
+#include <vector>
+#include <list>
 
 int main()
 {
@@ -34,6 +36,22 @@ int main()
         {
             std::sort(v.begin(), v.end());
             escape(v.data());
+        }
+    }, 1, 16);
+
+    nbench::benchmark2<>("counting")
+        .types<std::vector<int>,
+               std::list<int>>()
+        .run([](auto& loop)
+    {
+        auto data = nbench::random_range(100); //loop.number());
+        auto v = loop.type();
+        std::copy(data.begin(), data.end(), std::back_inserter(v));
+
+        while (loop)
+        {
+            std::count(v.begin(), v.end(), 42);
+            escape(&*v.begin());
         }
     });
 
