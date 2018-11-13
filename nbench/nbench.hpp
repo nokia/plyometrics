@@ -23,7 +23,7 @@ struct loop
     {
         _end = clock::now();
         _iterations++;
-        return _end - _start < std::chrono::seconds{2};
+        return _end - _start < std::chrono::seconds{1};
     }
 
     auto iteration_time() const
@@ -106,7 +106,7 @@ private:
             f(l);
 
             std::cout << _name << " / "
-                      << typeid(Type).name()
+                      << demangle<Type>{}
                       << " [" << l.number() << "]"
                       << ": " << l.iteration_time() << std::endl;
         }

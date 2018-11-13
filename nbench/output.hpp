@@ -3,6 +3,8 @@
 #include <chrono>
 #include <ostream>
 
+#include <cxxabi.h>
+
 namespace nbench
 {
 
@@ -22,6 +24,22 @@ template<class Rep, class Period>
 auto humanize(std::chrono::duration<Rep, Period> time)
 {
     return humanized_time<Rep, Period>{time};
+}
+
+template<class T>
+struct demangle
+{
+};
+
+template<class T>
+std::ostream& operator<<(std::ostream& os, demangle<T>)
+{
+    int status;
+    char* realname;
+    realname = abi::__cxa_demangle(typeid(T).name(), 0, 0, &status);
+    os << realname;
+    free(realname);
+    return os;
 }
 
 }

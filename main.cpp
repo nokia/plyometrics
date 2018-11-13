@@ -41,7 +41,7 @@ int main()
 
     benchmark("counting")
         .types<std::vector<int>, std::list<int>>()
-        .range(1, 1e3)
+        .range(1, 1e6)
         .run([](auto& loop)
     {
         auto data = nbench::random_range(loop.number());
@@ -50,8 +50,8 @@ int main()
 
         while (loop)
         {
-            std::count(v.begin(), v.end(), 42);
-            escape(&*v.begin());
+            auto c = std::count(v.begin(), v.end(), 42);
+            escape(&c);
         }
     });
 
