@@ -90,6 +90,10 @@ void swallow(Args&&...)
 {
 }
 
+struct nothing
+{
+};
+
 template<class... Types>
 struct benchmark2
 {
@@ -111,12 +115,13 @@ struct benchmark2
 
 private:
     template<class F, class Type>
-    auto run_type(const F& f) -> int
+    auto run_type(const F& f)
     {
         loop<Type> l{0};
         f(l);
         std::cout << _name << ": " << typeid(Type).name() << l.iteration_time() << std::endl;
-        return 0;
+
+        return nothing{};
     }
 
     std::string _name;
