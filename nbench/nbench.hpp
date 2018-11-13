@@ -80,13 +80,4 @@ void exponential_benchmark(const std::string& name, F&& f, std::size_t start = 1
     }
 }
 
-auto generate_random_data(std::size_t size)
-{
-    std::random_device rd;
-    std::mt19937 rng(rd());
-    std::vector<int> c(size);
-    std::generate(c.begin(), c.end(), rng);
-    return c;
-}
-
 }
