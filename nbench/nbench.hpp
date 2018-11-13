@@ -4,6 +4,7 @@
 #include <iostream>
 #include <random>
 #include <algorithm>
+#include <tuple>
 
 #include "compiler.hpp"
 
@@ -94,6 +95,11 @@ struct nothing
 {
 };
 
+struct exponential_range
+{
+    std::size_t from = 1, to = 1;
+};
+
 template<class... Types>
 struct benchmark2
 {
@@ -107,24 +113,45 @@ struct benchmark2
         return benchmark2<_Types...>(_name);
     }
 
-    template<class F>
-    void run(const F& f)
+    auto range(std::size_t from, std::size_t to)
+    {
+        benchmark2<Types...> b{_name};
+        b._range = {from, to};
+        return b;
+    }
+
+    template<class F, class U = std::tuple<Types...>>
+    auto run(const F& f) -> typename std::enable_if<std::tuple_size<U>::value != 0>::type
     {
         swallow(run_type<F, Types>(f)...);
     }
 
+    template<class F, class U = std::tuple<Types...>>
+    auto run(const F& f) -> typename std::enable_if<std::tuple_size<U>::value == 0>::type
+    {
+        run_type<F, nothing>(f);
+    }
+
 private:
-    template<class F, class Type>
+    template<class F, class Type = nothing>
     auto run_type(const F& f)
     {
-        loop<Type> l{0};
-        f(l);
-        std::cout << _name << ": " << typeid(Type).name() << l.iteration_time() << std::endl;
+        for (auto i = _range.from; i <= _range.to; i *= 2)
+        {
+            loop<Type> l{i};
+            f(l);
+
+            std::cout << _name << " / "
+                      << typeid(Type).name()
+                      << " [" << l.number() << "]"
+                      << ": " << l.iteration_time() << std::endl;
+        }
 
         return nothing{};
     }
 
     std::string _name;
+    exponential_range _range;
 };
 
 }

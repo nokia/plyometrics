@@ -8,7 +8,7 @@ int main()
 {
     using namespace nbench;
 
-    nbench::benchmark([](auto& loop)
+    benchmark2<>("make_shared").run([](auto& loop)
     {
         while (loop)
         {
@@ -17,7 +17,7 @@ int main()
         }
     });
 
-    nbench::benchmark([](auto& loop)
+    benchmark2<>("make_unique").run([](auto& loop)
     {
         while (loop)
         {
@@ -26,7 +26,7 @@ int main()
         }
     });
 
-    nbench::exponential_benchmark("sorting a std::vector", [](auto& loop)
+    benchmark2<>("sorting vector").range(1, 4).run([](auto& loop)
     {
         auto data = nbench::random_range(loop.number());
         std::vector<int> v;
@@ -37,14 +37,15 @@ int main()
             std::sort(v.begin(), v.end());
             escape(v.data());
         }
-    }, 1, 16);
+    });
 
-    nbench::benchmark2<>("counting")
+    benchmark2<>("counting")
         .types<std::vector<int>,
                std::list<int>>()
+        .range(1, 1e3)
         .run([](auto& loop)
     {
-        auto data = nbench::random_range(100); //loop.number());
+        auto data = nbench::random_range(loop.number());
         auto v = loop.type();
         std::copy(data.begin(), data.end(), std::back_inserter(v));
 
