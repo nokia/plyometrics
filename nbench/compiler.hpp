@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef __OPTIMIZE__
-    #warning debug
+    #warning it appears that you are building with -O0
 #endif
 
 namespace nbench
