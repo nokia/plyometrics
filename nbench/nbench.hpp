@@ -76,7 +76,7 @@ struct nothing
 {
 };
 
-struct exponential_range
+struct range_t
 {
     std::size_t from = 1, to = 1;
 };
@@ -132,7 +132,7 @@ private:
     }
 
     std::string _name;
-    exponential_range _range;
+    range_t _range;
 };
 
 auto benchmark(const std::string& name)
