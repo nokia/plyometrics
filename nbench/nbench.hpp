@@ -82,21 +82,21 @@ struct range_t
 };
 
 template<class... Types>
-struct benchmark2
+struct benchmark_t
 {
-    benchmark2(const std::string& name) : _name(name)
+    benchmark_t(const std::string& name) : _name(name)
     {
     }
 
     template<class... _Types>
     auto types()
     {
-        return benchmark2<_Types...>(_name);
+        return benchmark_t<_Types...>(_name);
     }
 
     auto range(std::size_t from, std::size_t to)
     {
-        benchmark2<Types...> b{_name};
+        benchmark_t<Types...> b{_name};
         b._range = {from, to};
         return b;
     }
@@ -137,7 +137,7 @@ private:
 
 auto benchmark(const std::string& name)
 {
-    return benchmark2<>{name};
+    return benchmark_t<>{name};
 }
 
 }
