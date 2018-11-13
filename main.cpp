@@ -42,21 +42,21 @@ int main()
         }
     });
 
-    //benchmark("counting")
-    //    .types<std::vector<int>, std::list<int>>()
-    //    .range(1, 1e6)
-    //    .run([](auto& loop)
-    //{
-    //    auto data = nbench::random_range(loop.number());
-    //    auto v = loop.type();
-    //    std::copy(data.begin(), data.end(), std::back_inserter(v));
+    benchmark("counting")
+        .types<std::vector<int>, std::list<int>>()
+        .range(1, 1e6)
+        .run([](auto& loop)
+    {
+        auto data = nbench::random_range(loop.number());
+        auto v = loop.type();
+        std::copy(data.begin(), data.end(), std::back_inserter(v));
 
-    //    while (loop)
-    //    {
-    //        auto c = std::count(v.begin(), v.end(), 42);
-    //        escape(&c);
-    //    }
-    //});
+        while (loop)
+        {
+            auto c = std::count(v.begin(), v.end(), 42);
+            escape(&c);
+        }
+    });
 
     benchmark("finding 42 in a set")
         .types<std::set<int>,

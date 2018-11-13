@@ -21,9 +21,15 @@ struct loop
 
     operator bool()
     {
+        if (!_started)
+        {
+            _start = clock::now();
+            _started = true;
+        }
+
         _end = clock::now();
         _iterations++;
-        return _end - _start < std::chrono::seconds{1};
+        return _end - _start < std::chrono::seconds{2};
     }
 
     auto iteration_time() const
@@ -48,6 +54,7 @@ private:
     clock::time_point _end;
     std::size_t _iterations = 0;
     std::size_t number_;
+    bool _started = false;
 };
 
 template<class... Args>
