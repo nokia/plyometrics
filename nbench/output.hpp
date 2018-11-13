@@ -42,4 +42,10 @@ std::ostream& operator<<(std::ostream& os, demangle<T>)
     return os;
 }
 
+struct benchmark_results
+{
+    std::string name;
+
+};
+
 }

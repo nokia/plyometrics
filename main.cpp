@@ -3,6 +3,9 @@
 #include <memory>
 #include <vector>
 #include <list>
+#include <set>
+#include <unordered_set>
+#include <boost/container/flat_set.hpp>
 
 int main()
 {
@@ -39,18 +42,39 @@ int main()
         }
     });
 
-    benchmark("counting")
-        .types<std::vector<int>, std::list<int>>()
-        .range(1, 1e6)
+    //benchmark("counting")
+    //    .types<std::vector<int>, std::list<int>>()
+    //    .range(1, 1e6)
+    //    .run([](auto& loop)
+    //{
+    //    auto data = nbench::random_range(loop.number());
+    //    auto v = loop.type();
+    //    std::copy(data.begin(), data.end(), std::back_inserter(v));
+
+    //    while (loop)
+    //    {
+    //        auto c = std::count(v.begin(), v.end(), 42);
+    //        escape(&c);
+    //    }
+    //});
+
+    benchmark("finding 42 in a set")
+        .types<std::set<int>,
+               std::unordered_set<int>,
+               boost::container::flat_set<int>>()
+        .range(1e6, 1e8)
         .run([](auto& loop)
     {
-        auto data = nbench::random_range(loop.number());
         auto v = loop.type();
-        std::copy(data.begin(), data.end(), std::back_inserter(v));
+
+        for (int i = 0; i < loop.number(); i++)
+        {
+            v.emplace(i);
+        }
 
         while (loop)
         {
-            auto c = std::count(v.begin(), v.end(), 42);
+            auto c = v.find(42) != v.end();
             escape(&c);
         }
     });
