@@ -67,25 +67,6 @@ private:
     std::size_t number_;
 };
 
-template<class F>
-void benchmark(F&& f)
-{
-    loop<> l{0};
-    f(l);
-    std::cout << l.iteration_time() << std::endl;
-}
-
-template<class F, class T = void>
-void exponential_benchmark(const std::string& name, F&& f, std::size_t start = 1, std::size_t end = 1e5)
-{
-    for (std::size_t i = start; i < end; i *= 2)
-    {
-        loop<T> l{i};
-        f(l);
-        std::cout << name << "[" << i << "]: " << l.iteration_time() << std::endl;
-    }
-}
-
 template<class... Args>
 void swallow(Args&&...)
 {
