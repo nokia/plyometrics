@@ -28,8 +28,13 @@ auto humanize(std::chrono::duration<Rep, Period> time)
     return humanized_time<Rep, Period>{time};
 }
 
+template<class T = void>
 struct loop
 {
+    explicit loop(std::size_t number) : number_(number)
+    {
+    }
+
     operator bool()
     {
         _end = clock::now();
@@ -42,18 +47,24 @@ struct loop
         return humanize((_end - _start) / _iterations);
     }
 
+    auto number() const
+    {
+        return number_;
+    }
+
 private:
     using clock = std::chrono::high_resolution_clock;
 
     clock::time_point _start = clock::now();
     clock::time_point _end;
     std::size_t _iterations = 0;
+    std::size_t number_;
 };
 
 template<class F>
 void benchmark(F&& f)
 {
-    loop l;
+    loop<> l{0};
     f(l);
     std::cout << l.iteration_time() << std::endl;
 }
@@ -61,10 +72,10 @@ void benchmark(F&& f)
 template<class F>
 void exponential_benchmark(const std::string& name, F&& f, std::size_t start = 1, std::size_t end = 1e5)
 {
-    for (int i = start; i < end; i *= 2)
+    for (std::size_t i = start; i < end; i *= 2)
     {
-        loop l;
-        f(l, i);
+        loop<> l{i};
+        f(l);
         std::cout << name << "[" << i << "]: " << l.iteration_time() << std::endl;
     }
 }

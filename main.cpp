@@ -6,7 +6,7 @@ int main()
 {
     using namespace nbench;
 
-    nbench::benchmark([](nbench::loop& loop)
+    nbench::benchmark([](auto& loop)
     {
         while (loop)
         {
@@ -15,7 +15,7 @@ int main()
         }
     });
 
-    nbench::benchmark([](nbench::loop& loop)
+    nbench::benchmark([](auto& loop)
     {
         while (loop)
         {
@@ -24,9 +24,9 @@ int main()
         }
     });
 
-    nbench::exponential_benchmark("sorting a std::vector", [](nbench::loop& loop, auto n)
+    nbench::exponential_benchmark("sorting a std::vector", [](auto& loop)
     {
-        auto data = nbench::random_range(n);
+        auto data = nbench::random_range(loop.number());
         std::vector<int> v;
         std::copy(data.begin(), data.end(), std::back_inserter(v));
 
