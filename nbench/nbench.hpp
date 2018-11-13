@@ -135,4 +135,9 @@ private:
     exponential_range _range;
 };
 
+auto benchmark(const std::string& name)
+{
+    return benchmark2<>{name};
+}
+
 }
