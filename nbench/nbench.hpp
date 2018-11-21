@@ -5,6 +5,8 @@
 #include <random>
 #include <algorithm>
 #include <tuple>
+#include <memory>
+#include <type_traits>
 
 #include "compiler.hpp"
 #include "output.hpp"
@@ -71,24 +73,39 @@ struct range_t
     std::size_t from = 1, to = 1;
 };
 
-template<class... Types>
-struct benchmark_t
+struct abstract_benchmark
 {
-    benchmark_t(const std::string& name) : _name(name)
+    virtual void run() = 0;
+    virtual ~abstract_benchmark() = default;
+};
+
+template<class Body = nothing, class... Types>
+struct benchmark_t : public abstract_benchmark
+{
+    explicit benchmark_t(const char* name) : _name(name)
+    {
+    }
+
+    explicit benchmark_t(const char* name, range_t range, Body body)
+        : _name(name), _range(range), _body(body)
     {
     }
 
     template<class... _Types>
     auto types()
     {
-        return benchmark_t<_Types...>(_name);
+        return benchmark_t<Body, _Types...>{_name, _range, _body};
     }
 
     auto range(std::size_t from, std::size_t to)
     {
-        benchmark_t<Types...> b{_name};
-        b._range = {from, to};
-        return b;
+        return benchmark_t<Body, Types...>{_name, {from, to}, _body};
+    }
+
+    template<class F>
+    constexpr auto body(const F& f)
+    {
+        return benchmark_t<F, Types...>{_name, _range, f};
     }
 
     template<class F, class U = std::tuple<Types...>>
@@ -103,7 +120,11 @@ struct benchmark_t
         run_type<F, nothing>(f);
     }
 
-private:
+    void run() override
+    {
+    }
+
+//private:
     template<class F, class Type = nothing>
     auto run_type(const F& f)
     {
@@ -121,13 +142,70 @@ private:
         return nothing{};
     }
 
-    std::string _name;
+    const char* _name;
     range_t _range;
+    Body _body;
 };
 
-auto benchmark(const std::string& name)
+auto benchmark(const char* name)
 {
     return benchmark_t<>{name};
 }
+
+using register_function = std::add_pointer<void(std::unique_ptr<abstract_benchmark>)>::type;
+
+template<class Body = nothing, class... Types>
+struct benchmark_adder
+{
+    ~benchmark_adder()
+    {
+        _register(std::make_unique<benchmark_t<Body, Types...>>(_name, _range, _body));
+    }
+
+    template<class... _Types>
+    constexpr auto types()
+    {
+        return benchmark_adder<Body, _Types...>{_name, _range, _body};
+    }
+
+    constexpr auto range(std::size_t from, std::size_t to)
+    {
+        return benchmark_adder<Body, Types...>{_name, {from, to}, _body};
+    }
+
+    template<class F>
+    constexpr auto body(const F& f)
+    {
+        return benchmark_adder<F, Types...>{_name, _range, f};
+    }
+
+    register_function _register;
+    const char* _name;
+    range_t _range;
+    Body _body;
+};
+
+struct registry
+{
+    static auto& get()
+    {
+        static registry r;
+        return r;
+    }
+
+    static void register_benchmark(std::unique_ptr<abstract_benchmark> b)
+    {
+        get()._benchmarks.push_back(std::move(b));
+    }
+
+    auto benchmark(const char* name)
+    {
+        return benchmark_adder<>{&register_benchmark, name};
+    }
+
+private:
+    std::vector<std::unique_ptr<abstract_benchmark>> _benchmarks;
+};
+
 
 }

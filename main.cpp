@@ -7,9 +7,20 @@
 #include <unordered_set>
 #include <boost/container/flat_set.hpp>
 
+    using namespace nbench;
+
+//auto b = benchmark_adder<>{registry::register_benchmark}.body([](auto& loop)
+//    {
+//        while (loop)
+//        {
+//            auto p = std::make_shared<int>(5);
+//            escape(p.get());
+//        }
+//    });
+//
+
 int main()
 {
-    using namespace nbench;
 
     benchmark("make_shared").run([](auto& loop)
     {
