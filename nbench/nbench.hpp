@@ -154,6 +154,12 @@ struct benchmark_builder
         return benchmark_adder{std::make_unique<benchmark_t<F, Types...>>(_name, _range, f)};
     }
 
+    template<class F>
+    constexpr auto operator=(const F& f)
+    {
+        return benchmark_adder{std::make_unique<benchmark_t<F, Types...>>(_name, _range, f)};
+    }
+
     const char* _name = "unnamed";
     range_t _range;
     Body _body;
