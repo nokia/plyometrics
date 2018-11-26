@@ -1,5 +1,7 @@
 #pragma once
 
+#include "loop.hpp"
+
 #include <chrono>
 #include <ostream>
 
@@ -40,6 +42,11 @@ std::ostream& operator<<(std::ostream& os, demangle<T>)
     os << realname;
     free(realname);
     return os;
+}
+
+template<class T>
+inline std::ostream& operator<<(std::ostream& os, const loop<T>&)
+{
 }
 
 struct benchmark_results
