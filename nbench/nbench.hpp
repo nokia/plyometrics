@@ -126,9 +126,6 @@ struct benchmark_t : public abstract_benchmark
     Body _body;
 };
 
-using register_function = std::add_pointer<void(std::unique_ptr<abstract_benchmark>)>::type;
-
-
 struct benchmark_adder
 {
     benchmark_adder(std::unique_ptr<abstract_benchmark> benchmark)
@@ -157,7 +154,6 @@ struct benchmark_builder
         return benchmark_adder{std::make_unique<benchmark_t<F, Types...>>(_name, _range, f)};
     }
 
-    register_function _register;
     const char* _name = "unnamed";
     range_t _range;
     Body _body;
