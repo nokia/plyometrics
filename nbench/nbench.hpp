@@ -10,6 +10,7 @@
 
 #include "compiler.hpp"
 #include "output.hpp"
+#include "registry.hpp"
 
 namespace nbench
 {
@@ -73,12 +74,6 @@ struct range_t
     std::size_t from = 1, to = 1;
 };
 
-struct abstract_benchmark
-{
-    virtual void run() = 0;
-    virtual ~abstract_benchmark() = default;
-};
-
 template<class Body = nothing, class... Types>
 struct benchmark_t : public abstract_benchmark
 {
@@ -133,30 +128,6 @@ struct benchmark_t : public abstract_benchmark
 
 using register_function = std::add_pointer<void(std::unique_ptr<abstract_benchmark>)>::type;
 
-
-struct registry
-{
-    static auto& get()
-    {
-        static registry r;
-        return r;
-    }
-
-    static void register_benchmark(std::unique_ptr<abstract_benchmark> b)
-    {
-        get()._benchmarks.push_back(std::move(b));
-    }
-
-    void run_all()
-    {
-        std::cout << _benchmarks.size() << " benchmarks to run" << std::endl;
-        for (auto& b : _benchmarks)
-            b->run();
-    }
-
-private:
-    std::vector<std::unique_ptr<abstract_benchmark>> _benchmarks;
-};
 
 struct benchmark_adder
 {
