@@ -112,10 +112,8 @@ struct benchmark_t : public abstract_benchmark
     template<class F, class Type = nothing>
     auto run_type(const F& f) -> nothing
     {
-        std::cout << "Range: " << _range.from << " " << _range.to << std::endl;
         for (auto i = _range.from; i <= _range.to; i *= 2)
         {
-            std::cout << "dupa" << std::endl;
             auto l = loop<Type>{i};
             f(l);
 
@@ -189,7 +187,7 @@ struct benchmark_builder
     }
 
     register_function _register;
-    const char* _name;
+    const char* _name = "unnamed";
     range_t _range;
     Body _body;
 };
