@@ -45,14 +45,12 @@ std::ostream& operator<<(std::ostream& os, demangle<T>)
 }
 
 template<class T>
-inline std::ostream& operator<<(std::ostream& os, const loop<T>&)
+inline std::ostream& operator<<(std::ostream& os, const loop<T>& l)
 {
+    return os << l.name() << " / "
+              << demangle<T>{}
+              << " [" << l.number() << "]"
+              << ": " << humanize(l.iteration_time());
 }
-
-struct benchmark_results
-{
-    std::string name;
-
-};
 
 }

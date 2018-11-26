@@ -61,13 +61,9 @@ private:
     {
         for (auto i = _range.from; i <= _range.to; i *= 2)
         {
-            auto l = loop<Type>{i};
+            auto l = loop<Type>{_name, i};
             f(l);
-
-            std::cout << _name << " / "
-                      << demangle<Type>{}
-                      << " [" << l.number() << "]"
-                      << ": " << humanize(l.iteration_time()) << std::endl;
+            std::cout << l << std::endl;
         }
 
         return nothing{};

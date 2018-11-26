@@ -8,7 +8,7 @@ namespace nbench
 template<class T = int>
 struct loop
 {
-    explicit loop(std::size_t number) : number_(number)
+    explicit loop(const char* name, std::size_t number) : _name(name), number_(number)
     {
     }
 
@@ -35,14 +35,20 @@ struct loop
         return number_;
     }
 
-    auto type() -> T
+    auto type() const -> T
     {
         return T{};
     };
 
+    auto name() const
+    {
+        return _name;
+    }
+
 private:
     using clock = std::chrono::high_resolution_clock;
 
+    const char* _name;
     clock::time_point _start = clock::now();
     clock::time_point _end;
     std::size_t _iterations = 0;
