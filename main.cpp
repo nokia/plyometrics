@@ -75,6 +75,5 @@ BENCHMARK("finding 42 in a set")
 
 int main(int argc, const char* argv[])
 {
-    nbench::parse(argc, argv);
-    registry::get().run_all();
+    nbench::run_all(argc, argv);
 }

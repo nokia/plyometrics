@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cmdline.hpp"
+
 #include <vector>
 #include <memory>
 
@@ -35,6 +37,12 @@ struct registry
 private:
     std::vector<std::unique_ptr<abstract_benchmark>> _benchmarks;
 };
+
+void run_all(int argc, const char* argv[])
+{
+    auto opts = nbench::parse_options(argc, argv);
+    registry::get().run_all();
+}
 
 }
 

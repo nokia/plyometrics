@@ -2,6 +2,7 @@
 
 #include <map>
 #include <sstream>
+#include <set>
 
 namespace nbench
 {
@@ -129,7 +130,7 @@ auto parse_option(const std::string& data) -> maybe<options>
     };
 }
 
-auto parse(int argc, const char* argv[])
+auto parse_options(int argc, const char* argv[])
 {
     std::stringstream ss;
 
