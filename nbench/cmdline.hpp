@@ -98,37 +98,33 @@ auto read_until_whitespace(const std::string& data) -> parse_result
 
 auto parse_option(const std::string& data) -> maybe<options>
 {
-    if (data.empty())
+    return none_if_empty(data).map([](auto data)
     {
-        return none;
-    }
-
-    if (data[0] == '-')
-    {
-        options opts;
-        auto name = read_until_whitespace(data.substr(1));
-        auto value = read_until_whitespace(name.data_left);
-
-        if (name.result and value.result)
+        if (data[0] == '-')
         {
-            opts.options.emplace(*name.result, *value.result);
+            options opts;
+            auto name = read_until_whitespace(data.substr(1));
+            auto value = read_until_whitespace(name.data_left);
+
+            if (name.result and value.result)
+            {
+                opts.options.emplace(*name.result, *value.result);
+            }
+            else if (name.result)
+            {
+                opts.switches.emplace(*name.result);
+            }
+            else
+                throw 1;
+
+            std::cout << "name: " << *name.result << "=" << *value.result << std::endl;
+
+            return opts + parse_option(value.data_left);
         }
-        else if (name.result)
-        {
-            opts.switches.emplace(*name.result);
-        }
-        else
-            throw 1;
-
-        std::cout << "name: " << *name.result << "=" << *value.result << std::endl;
-
-        return opts + parse_option(value.data_left);
-    }
-
-    throw 2;
+    });
 }
 
-std::map<std::string, std::string> parse(int argc, const char* argv[])
+auto parse(int argc, const char* argv[])
 {
     std::stringstream ss;
 
@@ -148,7 +144,7 @@ std::map<std::string, std::string> parse(int argc, const char* argv[])
         std::cout << "opt: " << s.first << " " << s.second << std::endl;
     }
 
-    return {};
+    return opts;
 }
 
 }
