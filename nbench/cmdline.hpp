@@ -25,13 +25,18 @@ struct maybe
         return has;
     }
 
+    T& operator*()
+    {
+        return data;
+    }
+
     bool has;
     T data;
 };
 
 struct parse_result
 {
-    std::string result;
+    maybe<std::string> result;
     std::string data_left;
 };
 
@@ -43,16 +48,22 @@ struct options
     std::map<std::string, std::string> options;
 };
 
-auto read_until_whitespace(const std::string& data_left, const std::string& read_so_far = "") -> maybe_result
+template<class T>
+auto none_if_empty(const T& value) -> maybe<T>
+{
+    return value.empty() ? maybe<T>{none} : value;
+}
+
+auto read_until_whitespace(const std::string& data_left, const std::string& read_so_far = "") -> parse_result
 {
     if (data_left.empty())
     {
-        return parse_result{read_so_far, data_left};
+        return parse_result{none_if_empty(read_so_far), data_left};
     }
 
     if (data_left[0] == ' ')
     {
-        return parse_result{read_so_far, data_left.substr(1)};
+        return parse_result{none_if_empty(read_so_far), data_left.substr(1)};
     }
 
     return read_until_whitespace(data_left.substr(1), read_so_far + data_left[0]);
@@ -68,22 +79,22 @@ auto parse_option(const std::string& data, options opts = options{}) -> maybe<op
     if (data[0] == '-')
     {
         auto name = read_until_whitespace(data.substr(1));
-        auto value = read_until_whitespace(name.data.data_left);
+        auto value = read_until_whitespace(name.data_left);
 
-        if (name and value)
+        if (name.result and value.result)
         {
-            opts.options.emplace(name.data.result, value.data.result);
+            opts.options.emplace(*name.result, *value.result);
         }
-        else if (name)
+        else if (name.result)
         {
-            opts.switches.emplace(name.data.result);
+            opts.switches.emplace(*name.result);
         }
         else
             throw 1;
 
-        std::cout << "name: " << name.data.result << "=" << value.data.result << std::endl;
+        std::cout << "name: " << *name.result << "=" << *value.result << std::endl;
 
-        return parse_option(value.data.data_left, opts);
+        return parse_option(value.data_left, opts);
     }
 
     throw 2;
@@ -97,7 +108,7 @@ std::map<std::string, std::string> parse(int argc, const char* argv[])
         ss << argv[i] << " ";
 
     const auto app = read_until_whitespace(ss.str());
-    const auto opts = parse_option(app.data.data_left);
+    const auto opts = parse_option(app.data_left);
 
     for (const auto& s: opts.data.switches)
     {
