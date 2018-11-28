@@ -1,18 +1,13 @@
 #pragma once
 
 #include "cmdline.hpp"
+#include "benchmark.hpp"
 
 #include <vector>
 #include <memory>
 
 namespace nbench
 {
-
-struct abstract_benchmark
-{
-    virtual void run() = 0;
-    virtual ~abstract_benchmark() = default;
-};
 
 struct registry
 {

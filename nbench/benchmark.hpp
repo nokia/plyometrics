@@ -5,6 +5,12 @@
 namespace nbench
 {
 
+struct abstract_benchmark
+{
+    virtual void run() = 0;
+    virtual ~abstract_benchmark() = default;
+};
+
 template<class Body = nothing, class... Types>
 struct benchmark_t : public abstract_benchmark
 {
