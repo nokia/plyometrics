@@ -53,4 +53,20 @@ inline std::ostream& operator<<(std::ostream& os, const loop<T>& l)
               << ": " << humanize(l.iteration_time());
 }
 
+template<class T>
+struct json_object
+{
+    const T& object;
+};
+
+template<class T>
+inline std::ostream& operator<<(std::ostream& os, const json_object<loop<T>>& l)
+{
+    return os << "{"
+              << "name: \"" << l.object.name() << " [" << demangle<T>{} << "]\", "
+              << "number: " << l.object.number() << ", "
+              << "time: " << l.object.iteration_time().count()
+              << "}";
+}
+
 }

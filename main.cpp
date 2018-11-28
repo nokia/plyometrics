@@ -6,6 +6,7 @@
 #include <set>
 #include <unordered_set>
 #include <boost/container/flat_set.hpp>
+#include "nbench/cmdline.hpp"
 
 using namespace nbench;
 
@@ -72,7 +73,8 @@ BENCHMARK("finding 42 in a set")
     }
 };
 
-int main()
+int main(int argc, const char* argv[])
 {
+    nbench::parse(argc, argv);
     registry::get().run_all();
 }
