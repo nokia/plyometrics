@@ -62,7 +62,7 @@ auto parse_option(const std::string& data, options opts = options{}) -> maybe<op
 {
     if (data.empty())
     {
-        return none;
+        return opts;
     }
 
     if (data[0] == '-')
