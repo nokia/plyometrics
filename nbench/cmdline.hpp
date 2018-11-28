@@ -63,19 +63,28 @@ struct parse_result
     std::string data_left;
 };
 
-using maybe_result = maybe<parse_result>;
-
 struct options
 {
+    options() = default;
+
+    options(const std::string& switch_) : switches{switch_}
+    {
+    }
+
+    options(const std::string& name, const std::string& value)
+        : named{{name, value}}
+    {
+    }
+
     std::set<std::string> switches;
-    std::map<std::string, std::string> options;
+    std::map<std::string, std::string> named;
 };
 
 auto operator+(const options& a, const options& b)
 {
     options r = a;
     std::copy(b.switches.begin(), b.switches.end(), std::inserter(r.switches, r.switches.end()));
-    std::copy(b.options.begin(), b.options.end(), std::inserter(r.options, r.options.end()));
+    std::copy(b.named.begin(), b.named.end(), std::inserter(r.named, r.named.end()));
     return r;
 }
 
@@ -109,7 +118,7 @@ auto parse_option(const std::string& data) -> maybe<options>
             const auto value = read_until_whitespace(name.data_left);
 
             if (name.result and value.result)
-                opts.options.emplace(*name.result, *value.result);
+                opts.named.emplace(*name.result, *value.result);
             else if (name.result)
                 opts.switches.emplace(*name.result);
             else
@@ -135,7 +144,7 @@ auto parse(int argc, const char* argv[])
         std::cout << "switch: " << s << std::endl;
     }
 
-    for (const auto& s: opts.data.options)
+    for (const auto& s: opts.data.named)
     {
         std::cout << "opt: " << s.first << " " << s.second << std::endl;
     }
