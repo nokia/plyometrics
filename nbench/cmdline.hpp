@@ -3,48 +3,15 @@
 #include <map>
 #include <sstream>
 #include <set>
+#include <optional>
 
 namespace nbench
 {
 
-struct none_t{};
-constexpr auto none = none_t{};
+constexpr auto none = std::nullopt;
 
 template<class T>
-struct maybe
-{
-    maybe(none_t) : has(false), data{}
-    {
-    }
-
-    maybe(T data) : has(true), data(data)
-    {
-    }
-
-    operator bool() const
-    {
-        return has;
-    }
-
-    T& operator*()
-    {
-        return data;
-    }
-
-    const T& operator*() const
-    {
-        return data;
-    }
-
-    template<class F>
-    auto map(F f) -> decltype(f(std::declval<T>()))
-    {
-        return has ? f(data) : none;
-    }
-
-    bool has;
-    T data;
-};
+using maybe = std::optional<T>;
 
 template<class T>
 auto operator+(const T& a, const maybe<T>& b) -> maybe<T>
@@ -148,12 +115,12 @@ auto parse_options(int argc, const char* argv[])
     const auto app = read_until_whitespace(ss.str());
     const auto opts = parse_option(app.data_left);
 
-    for (const auto& s: opts.data.switches)
+    for (const auto& s: opts->switches)
     {
         std::cout << "switch: " << s << std::endl;
     }
 
-    for (const auto& s: opts.data.named)
+    for (const auto& s: opts->named)
     {
         std::cout << "opt: " << s.first << " " << s.second << std::endl;
     }
