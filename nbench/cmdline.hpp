@@ -115,7 +115,7 @@ auto read_until_whitespace(const std::string& data) -> parse_result
 
 auto parse_option(const std::string& data) -> maybe<options>
 {
-    return none_if_empty(data) >>= [](auto data)
+    return none_if_empty(data) >>= [](auto data) -> maybe<options>
     {
         if (data[0] == '-')
         {
@@ -133,6 +133,8 @@ auto parse_option(const std::string& data) -> maybe<options>
 
             return opts + parse_option(value.data_left);
         }
+
+        return none;
     };
 }
 

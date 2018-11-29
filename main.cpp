@@ -61,7 +61,7 @@ BENCHMARK("finding 42 in a set")
 {
     auto v = loop.type();
 
-    for (int i = 0; i < loop.number(); i++)
+    for (std::size_t i = 0; i < loop.number(); i++)
     {
         v.emplace(i);
     }

@@ -52,8 +52,8 @@ struct benchmark_builder
     }
 
     const char* _name = "unnamed";
-    range_t _range;
-    Body _body;
+    range_t _range{};
+    Body _body{};
 };
 
 
