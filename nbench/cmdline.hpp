@@ -82,27 +82,24 @@ auto read_until_whitespace(const std::string& data) -> parse_result
 
 auto parse_option(const std::string& data) -> maybe<options>
 {
-    return none_if_empty(data) >>= [](auto data) -> maybe<options>
+    if (!data.empty() && data[0] == '-')
     {
-        if (data[0] == '-')
-        {
-            options opts;
+        options opts;
 
-            const auto name = read_until_whitespace(data.substr(1));
-            const auto value = read_until_whitespace(name.data_left);
+        const auto name = read_until_whitespace(data.substr(1));
+        const auto value = read_until_whitespace(name.data_left);
 
-            if (name.result and value.result)
-                opts.named.emplace(*name.result, *value.result);
-            else if (name.result)
-                opts.switches.emplace(*name.result);
-            else
-                throw 1;
+        if (name.result and value.result)
+            opts.named.emplace(*name.result, *value.result);
+        else if (name.result)
+            opts.switches.emplace(*name.result);
+        else
+            throw 1;
 
-            return opts + parse_option(value.data_left);
-        }
+        return opts + parse_option(value.data_left);
+    }
 
-        return none;
-    };
+    return none;
 }
 
 auto parse_options(int argc, const char* argv[])
