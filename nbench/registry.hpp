@@ -22,7 +22,7 @@ struct registry
         get()._benchmarks.push_back(std::move(b));
     }
 
-    void run_all()
+    void run_all(const options& opts)
     {
         std::cout << _benchmarks.size() << " benchmarks to run" << std::endl;
         for (auto& b : _benchmarks)
@@ -36,7 +36,7 @@ private:
 void run_all(int argc, const char* argv[])
 {
     auto opts = nbench::parse_options(argc, argv);
-    registry::get().run_all();
+    registry::get().run_all(opts);
 }
 
 }

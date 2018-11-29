@@ -95,6 +95,12 @@ auto none_if_empty(const T& value) -> maybe<T>
     return value.empty() ? maybe<T>{none} : value;
 }
 
+template<class T>
+auto default_if_none(const maybe<T>& value) -> T
+{
+    return value ? *value : T{};
+}
+
 auto read_until_whitespace(const std::string& data) -> parse_result
 {
     if (data.empty())
@@ -150,7 +156,7 @@ auto parse_options(int argc, const char* argv[])
         std::cout << "opt: " << s.first << " " << s.second << std::endl;
     }
 
-    return opts;
+    return default_if_none(opts);
 }
 
 }
