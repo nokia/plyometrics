@@ -1,7 +1,7 @@
 #pragma once
 
-#include "loop.hpp"
 #include "cmdline.hpp"
+#include "result.hpp"
 
 #include <chrono>
 #include <ostream>
@@ -46,39 +46,30 @@ std::ostream& operator<<(std::ostream& os, demangle<T>)
 }
 
 template<class T>
-inline std::ostream& operator<<(std::ostream& os, const loop<T>& l)
-{
-    return os << l.name() << " / "
-              << demangle<T>{}
-              << " [" << l.number() << "]"
-              << ": " << humanize(l.iteration_time());
-}
-
-template<class T>
 struct json_object
 {
     const T& object;
 };
 
-template<class T>
-void print_json(std::ostream& os, const loop<T>& l)
-{
-    os << "{"
-       << "name: \"" << l.name() << " [" << demangle<T>{} << "]\", "
-       << "type: \"" << demangle<T>{} << "\", "
-       << "number: " << l.number() << ", "
-       << "time: " << l.iteration_time().count()
-       << "}" << std::endl;
-}
-
-template<class Loop>
-void print_result(const Loop& loop, const options& opts)
-{
-    if (opts.has_switch("x"))
-        print_json(std::cout, loop);
-    else
-        std::cout << loop << std::endl;
-}
+//template<class T>
+//void print_json(std::ostream& os, const loop<T>& l)
+//{
+//    os << "{"
+//       << "name: \"" << l.name() << " [" << demangle<T>{} << "]\", "
+//       << "type: \"" << demangle<T>{} << "\", "
+//       << "number: " << l.number() << ", "
+//       << "time: " << l.iteration_time().count()
+//       << "}" << std::endl;
+//}
+//
+//template<class Loop>
+//void print_result(const Loop& loop, const options& opts)
+//{
+//    if (opts.has_switch("x"))
+//        print_json(std::cout, loop);
+//    else
+//        std::cout << loop << std::endl;
+//}
 
 struct result_printer
 {
@@ -86,8 +77,25 @@ struct result_printer
     virtual ~result_printer() = default;
 };
 
+struct printer_for_humans : public result_printer
+{
+    void print_result(const result& res) override
+    {
+        std::cout << res.name() << " / "
+                  << res.type_name()
+                  << " [" << res.number() << "]"
+                  << ": " << humanize(res.iteration_time()) << std::endl;
+    }
+
+    ~printer_for_humans() override
+    {
+        std::cout << '\n' << "above results are printed using default, human readable printer";
+    }
+};
+
 auto make_result_printer(const options& opts) -> std::unique_ptr<result_printer>
 {
+    return std::make_unique<printer_for_humans>();
 }
 
 }

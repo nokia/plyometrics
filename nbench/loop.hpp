@@ -1,21 +1,11 @@
 #pragma once
 
-#include <chrono>
+#include "output.hpp"
+#include "result.hpp"
+#include "clock.hpp"
 
 namespace nbench
 {
-
-using clock = std::chrono::high_resolution_clock;
-
-struct result
-{
-    virtual auto iteration_time() const -> clock::duration = 0;
-    virtual auto number() const -> std::size_t = 0;
-    virtual auto type_name() const -> std::string = 0;
-    virtual auto name() const -> std::string = 0;
-
-    virtual ~result() = default;
-};
 
 template<class T = int>
 struct loop : public result
@@ -54,7 +44,9 @@ struct loop : public result
 
     auto type_name() const -> std::string override
     {
-        return "";
+        std::stringstream ss;
+        ss << demangle<T>{};
+        return ss.str();
     }
 
     auto name() const -> std::string override
