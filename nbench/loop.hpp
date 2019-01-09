@@ -37,10 +37,11 @@ struct loop : public result
         return number_;
     }
 
-    auto type() const -> T
+    template<class... Args>
+    auto type(Args&&... args) const -> T
     {
-        return T{};
-    };
+        return T{std::forward<Args>(args)...};
+    }
 
     auto type_name() const -> std::string override
     {

@@ -40,11 +40,10 @@ BENCHMARK("sorting vector").range(1, 4) = [](auto& loop)
     }
 };
 
-BENCHMARK("counting").types<std::vector<int>, std::list<int>>().range(1, 1e6) = [](auto& loop)
+BENCHMARK("counting").types<std::vector<int>, std::list<int>>().range(1, 1e7) = [](auto& loop)
 {
     auto data = nbench::random_range(loop.number());
-    auto v = loop.type();
-    std::copy(data.begin(), data.end(), std::back_inserter(v));
+    auto v = loop.type(data.begin(), data.end());
 
     while (loop)
     {
