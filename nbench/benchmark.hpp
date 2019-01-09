@@ -10,6 +10,7 @@ namespace nbench
 struct abstract_benchmark
 {
     virtual void run(result_printer&) = 0;
+    virtual std::string name() const = 0;
     virtual ~abstract_benchmark() = default;
 };
 
@@ -24,6 +25,11 @@ struct benchmark_t : public abstract_benchmark
     void run(result_printer& printer) override
     {
         run<std::tuple<Types...>>(printer);
+    }
+
+    auto name() const -> std::string override
+    {
+        return _name;
     }
 
 private:

@@ -49,6 +49,14 @@ struct options
         return switches.find(name) != switches.end();
     }
 
+    maybe<std::string> option(const std::string& name) const
+    {
+        auto it = named.find(name);
+        if (it != named.end())
+            return it->second;
+        return none;
+    }
+
     std::set<std::string> switches;
     std::map<std::string, std::string> named;
 };

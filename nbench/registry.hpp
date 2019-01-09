@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <memory>
+#include <regex>
 
 namespace nbench
 {
@@ -24,13 +25,24 @@ struct registry
 
     void run_all(const options& opts)
     {
-        std::cout << _benchmarks.size() << " benchmarks to run" << std::endl;
+        std::cout << _benchmarks.size() << " benchmarks to run\n" << std::endl;
         auto printer = make_result_printer(opts);
+        auto re = benchmark_regex(opts);
+
         for (auto& b : _benchmarks)
-            b->run(*printer);
+            if (std::regex_search(b->name(), re))
+                b->run(*printer);
     }
 
 private:
+    auto benchmark_regex(const options& opts) const -> std::regex
+    {
+        auto s = opts.option("b");
+        if (s)
+            return std::regex{*s};
+        return std::regex{".*"};
+    }
+
     std::vector<std::unique_ptr<abstract_benchmark>> _benchmarks;
 };
 
