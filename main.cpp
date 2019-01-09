@@ -10,7 +10,7 @@
 
 using namespace nbench;
 
-BENCHMARK("make_shared") = [](auto& loop)
+BENCHMARK("allocate by make_shared") = [](auto& loop)
 {
     while (loop)
     {
@@ -19,7 +19,7 @@ BENCHMARK("make_shared") = [](auto& loop)
     }
 };
 
-BENCHMARK("make_unique") = [](auto& loop)
+BENCHMARK("allocate by make_unique") = [](auto& loop)
 {
     while (loop)
     {
@@ -28,7 +28,27 @@ BENCHMARK("make_unique") = [](auto& loop)
     }
 };
 
-BENCHMARK("sorting vector").range(1, 4) = [](auto& loop)
+BENCHMARK("allocate by new and shared_ptr") = [](auto& loop)
+{
+    while (loop)
+    {
+        auto p = std::shared_ptr<int>(new int(5));
+        escape(p.get());
+    }
+};
+
+BENCHMARK("allocate by malloc") = [](auto& loop)
+{
+    while (loop)
+    {
+        auto* p = reinterpret_cast<int*>(malloc(sizeof(int)));
+        *p = 5;
+        escape(p);
+        free(p);
+    }
+};
+
+BENCHMARK("sorting vector").range(1, 1e6) = [](auto& loop)
 {
     auto data = nbench::random_range(loop.number());
     auto v = std::vector<int>{data.begin(), data.end()};
