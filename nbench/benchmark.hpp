@@ -1,13 +1,14 @@
 #pragma once
 
 #include "utils.hpp"
+#include "cmdline.hpp"
 
 namespace nbench
 {
 
 struct abstract_benchmark
 {
-    virtual void run() = 0;
+    virtual void run(const options&) = 0;
     virtual ~abstract_benchmark() = default;
 };
 
@@ -19,7 +20,7 @@ struct benchmark_t : public abstract_benchmark
     {
     }
 
-    void run() override
+    void run(const options& opts) override
     {
         run<std::tuple<Types...>>();
     }

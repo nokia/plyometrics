@@ -22,11 +22,11 @@ struct registry
         get()._benchmarks.push_back(std::move(b));
     }
 
-    void run_all(const options&)
+    void run_all(const options& opts)
     {
         std::cout << _benchmarks.size() << " benchmarks to run" << std::endl;
         for (auto& b : _benchmarks)
-            b->run();
+            b->run(opts);
     }
 
 private:
