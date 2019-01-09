@@ -7,14 +7,17 @@ import matplotlib.pyplot as plt
 
 
 def visualize(grouped_data):
-    #print(grouped_data)
     for name, data in grouped_data.items():
+        plt.title(name)
         for type_name, results in data.items():
             print(name, type_name, results)
             x = [sample['number'] for sample in results]
             y = [sample['time'] for sample in results]
-            plt.plot(x, y)
-            plt.show()
+            plt.plot(x, y, label=type_name)
+        plt.xlabel('number')
+        plt.ylabel('time')
+        plt.legend()
+        plt.show()
 
 
 def group(data):

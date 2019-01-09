@@ -24,7 +24,7 @@ struct loop : public result
 
         _end = clock::now();
         _iterations++;
-        return _end - _start < std::chrono::seconds{2};
+        return _end - _start < std::chrono::seconds{1};
     }
 
     auto iteration_time() const -> clock::duration override

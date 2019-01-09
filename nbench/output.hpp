@@ -95,6 +95,8 @@ struct json_printer : public result_printer
                 << "\"number\": " << res.number() << ", "
                 << "\"time\": " << res.iteration_time().count()
                 << "}\n";
+
+        std::cerr << '.';
     }
 
     ~json_printer() override
