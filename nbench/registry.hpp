@@ -25,7 +25,6 @@ struct registry
 
     void run_all(const options& opts)
     {
-        std::cout << _benchmarks.size() << " benchmarks to run\n" << std::endl;
         auto printer = make_result_printer(opts);
         auto re = benchmark_regex(opts);
 

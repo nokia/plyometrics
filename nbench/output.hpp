@@ -83,18 +83,28 @@ struct json_printer : public result_printer
 
     void print_result(const result& res) override
     {
-        std::cout << "{"
-                  << "name: \"" << res.name() << "\", "
-                  << "type: \"" << res.type_name() << "\", "
-                  << "number: " << res.number() << ", "
-                  << "time: " << res.iteration_time().count()
-                  << "}" << std::endl;
+        auto buf = _buffer.str();
+        _buffer = std::stringstream{};
+
+        if (!buf.empty())
+            std::cout << buf << ", \n";
+
+        _buffer << "{"
+                << "\"name\": \"" << res.name() << "\", "
+                << "\"type\": \"" << res.type_name() << "\", "
+                << "\"number\": " << res.number() << ", "
+                << "\"time\": " << res.iteration_time().count()
+                << "}\n";
     }
 
     ~json_printer() override
     {
+        std::cout << _buffer.str();
         std::cout << ']' << std::endl;
     }
+
+private:
+    std::stringstream _buffer;
 };
 
 auto make_result_printer(const options& opts) -> std::unique_ptr<result_printer>
