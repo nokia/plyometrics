@@ -1,6 +1,7 @@
 #pragma once
 
 #include "loop.hpp"
+#include "cmdline.hpp"
 
 #include <chrono>
 #include <ostream>
@@ -60,13 +61,23 @@ struct json_object
 };
 
 template<class T>
-inline std::ostream& operator<<(std::ostream& os, const json_object<loop<T>>& l)
+void print_json(std::ostream& os, const loop<T>& l)
 {
-    return os << "{"
-              << "name: \"" << l.object.name() << " [" << demangle<T>{} << "]\", "
-              << "number: " << l.object.number() << ", "
-              << "time: " << l.object.iteration_time().count()
-              << "}";
+    os << "{"
+       << "name: \"" << l.name() << " [" << demangle<T>{} << "]\", "
+       << "type: \"" << demangle<T>{} << "\", "
+       << "number: " << l.number() << ", "
+       << "time: " << l.iteration_time().count()
+       << "}" << std::endl;
+}
+
+template<class Loop>
+void print_result(const Loop& loop, const options& opts)
+{
+    if (opts.has_switch("x"))
+        print_json(std::cout, loop);
+    else
+        std::cout << loop << std::endl;
 }
 
 }

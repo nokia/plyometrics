@@ -45,7 +45,7 @@ private:
         {
             auto l = loop<Type>{_name, i};
             _body(l);
-            std::cout << l << std::endl;
+            print_result(l, opts);
         }
 
         return nothing{};

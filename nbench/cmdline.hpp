@@ -44,6 +44,11 @@ struct options
     {
     }
 
+    bool has_switch(const std::string& name) const
+    {
+        return switches.find(name) != switches.end();
+    }
+
     std::set<std::string> switches;
     std::map<std::string, std::string> named;
 };
