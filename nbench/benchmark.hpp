@@ -21,29 +21,29 @@ struct benchmark_t : public abstract_benchmark
 
     void run() override
     {
-        run<Body, std::tuple<Types...>>(_body);
+        run<std::tuple<Types...>>();
     }
 
 private:
-    template<class F, class U = std::tuple<Types...>>
-    auto run(const F& f) -> typename std::enable_if<std::tuple_size<U>::value != 0>::type
+    template<class U = std::tuple<Types...>>
+    auto run() -> typename std::enable_if<std::tuple_size<U>::value != 0>::type
     {
-        swallow(run_type<F, Types>(f)...);
+        swallow(run_with_type<Types>()...);
     }
 
-    template<class F, class U = std::tuple<Types...>>
-    auto run(const F& f) -> typename std::enable_if<std::tuple_size<U>::value == 0>::type
+    template<class U = std::tuple<Types...>>
+    auto run() -> typename std::enable_if<std::tuple_size<U>::value == 0>::type
     {
-        run_type<F, nothing>(f);
+        run_with_type<nothing>();
     }
 
-    template<class F, class Type = nothing>
-    auto run_type(const F& f) -> nothing
+    template<class Type = nothing>
+    auto run_with_type() -> nothing
     {
         for (auto i = _range.from; i <= _range.to; i *= 2)
         {
             auto l = loop<Type>{_name, i};
-            f(l);
+            _body(l);
             std::cout << l << std::endl;
         }
 
