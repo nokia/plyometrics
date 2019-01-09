@@ -64,7 +64,8 @@ struct printer_for_humans : public result_printer
         std::cout << res.name() << " / "
                   << res.type_name()
                   << " [" << res.number() << "]"
-                  << ": " << humanize(res.iteration_time()) << std::endl;
+                  << ": " << humanize(res.iteration_time())
+                  << " (ratio: " << float(res.number()) / res.iteration_time().count() << ")" << std::endl;
     }
 
     ~printer_for_humans() override

@@ -40,6 +40,26 @@ BENCHMARK("sorting vector").range(1, 4) = [](auto& loop)
     }
 };
 
+BENCHMARK("cache").range(1, 1e9) = [](auto& loop)
+{
+    auto random = nbench::random_range(10000);
+    auto indicies = std::vector<std::size_t>{};
+
+    for (auto r : random)
+        indicies.emplace_back(r % loop.number());
+
+    auto v = std::vector<char>(1e9, 0);
+
+    while (loop)
+    {
+        for (auto idx : indicies)
+        {
+            v[idx]++;
+            escape(&v[idx]);
+        }
+    }
+};
+
 BENCHMARK("counting").types<std::vector<int>, std::list<int>>().range(1, 1e7) = [](auto& loop)
 {
     auto data = nbench::random_range(loop.number());

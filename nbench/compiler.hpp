@@ -12,4 +12,10 @@ void escape(void* p)
     asm volatile("" : : "g"(p) : "memory");
 }
 
+__attribute__((noinline)) void im_here()
+{
+    asm volatile("");
+}
+
+
 }

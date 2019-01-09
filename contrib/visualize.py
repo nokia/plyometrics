@@ -10,7 +10,6 @@ def visualize(grouped_data):
     for name, data in grouped_data.items():
         plt.title(name)
         for type_name, results in data.items():
-            print(name, type_name, results)
             x = [sample['number'] for sample in results]
             y = [sample['time'] for sample in results]
             plt.plot(x, y, label=type_name)
@@ -30,7 +29,6 @@ def group(data):
 def main():
     try:
         data = json.load(sys.stdin)
-        print(group(data))
         visualize(group(data))
     except json.decoder.JSONDecodeError as e:
         print(e)
