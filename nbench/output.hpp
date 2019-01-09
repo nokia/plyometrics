@@ -51,26 +51,6 @@ struct json_object
     const T& object;
 };
 
-//template<class T>
-//void print_json(std::ostream& os, const loop<T>& l)
-//{
-//    os << "{"
-//       << "name: \"" << l.name() << " [" << demangle<T>{} << "]\", "
-//       << "type: \"" << demangle<T>{} << "\", "
-//       << "number: " << l.number() << ", "
-//       << "time: " << l.iteration_time().count()
-//       << "}" << std::endl;
-//}
-//
-//template<class Loop>
-//void print_result(const Loop& loop, const options& opts)
-//{
-//    if (opts.has_switch("x"))
-//        print_json(std::cout, loop);
-//    else
-//        std::cout << loop << std::endl;
-//}
-
 struct result_printer
 {
     virtual void print_result(const result&) = 0;
@@ -89,12 +69,38 @@ struct printer_for_humans : public result_printer
 
     ~printer_for_humans() override
     {
-        std::cout << '\n' << "above results are printed using default, human readable printer";
+        std::cout << '\n' << "above results are printed using default, human readable printer"
+                          << " but you can use JSON via -x switch" << std::endl;
+    }
+};
+
+struct json_printer : public result_printer
+{
+    json_printer()
+    {
+        std::cout << '[' << std::endl;
+    }
+
+    void print_result(const result& res) override
+    {
+        std::cout << "{"
+                  << "name: \"" << res.name() << "\", "
+                  << "type: \"" << res.type_name() << "\", "
+                  << "number: " << res.number() << ", "
+                  << "time: " << res.iteration_time().count()
+                  << "}" << std::endl;
+    }
+
+    ~json_printer() override
+    {
+        std::cout << ']' << std::endl;
     }
 };
 
 auto make_result_printer(const options& opts) -> std::unique_ptr<result_printer>
 {
+    if (opts.has_switch("x"))
+        return std::make_unique<json_printer>();
     return std::make_unique<printer_for_humans>();
 }
 
