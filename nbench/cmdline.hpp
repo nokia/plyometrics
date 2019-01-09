@@ -125,19 +125,6 @@ auto parse_options(int argc, const char* argv[])
     const auto app = read_until_whitespace(ss.str());
     const auto opts = parse_option(app.data_left);
 
-    if (opts)
-    {
-        for (const auto& s: opts->switches)
-        {
-            std::cout << "switch: " << s << std::endl;
-        }
-
-        for (const auto& s: opts->named)
-        {
-            std::cout << "opt: " << s.first << " " << s.second << std::endl;
-        }
-    }
-
     return default_if_none(opts);
 //return options{};
 }
