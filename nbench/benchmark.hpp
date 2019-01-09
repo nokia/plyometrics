@@ -22,24 +22,24 @@ struct benchmark_t : public abstract_benchmark
 
     void run(const options& opts) override
     {
-        run<std::tuple<Types...>>();
+        run<std::tuple<Types...>>(opts);
     }
 
 private:
     template<class U = std::tuple<Types...>>
-    auto run() -> typename std::enable_if<std::tuple_size<U>::value != 0>::type
+    auto run(const options& opts) -> typename std::enable_if<std::tuple_size<U>::value != 0>::type
     {
-        swallow(run_with_type<Types>()...);
+        swallow(run_with_type<Types>(opts)...);
     }
 
     template<class U = std::tuple<Types...>>
-    auto run() -> typename std::enable_if<std::tuple_size<U>::value == 0>::type
+    auto run(const options& opts) -> typename std::enable_if<std::tuple_size<U>::value == 0>::type
     {
-        run_with_type<nothing>();
+        run_with_type<nothing>(opts);
     }
 
     template<class Type = nothing>
-    auto run_with_type() -> nothing
+    auto run_with_type(const options& opts) -> nothing
     {
         for (auto i = _range.from; i <= _range.to; i *= 2)
         {
