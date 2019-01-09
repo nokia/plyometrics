@@ -80,4 +80,14 @@ void print_result(const Loop& loop, const options& opts)
         std::cout << loop << std::endl;
 }
 
+struct result_printer
+{
+    virtual void print_result(const result&) = 0;
+    virtual ~result_printer() = default;
+};
+
+auto make_result_printer(const options& opts) -> std::unique_ptr<result_printer>
+{
+}
+
 }
