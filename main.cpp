@@ -48,7 +48,7 @@ BENCHMARK("allocate by malloc") = [](auto& loop)
     }
 };
 
-BENCHMARK("sorting vector").range(1, 1e6) = [](auto& loop)
+BENCHMARK("sorting vector").range(1e5, 1e6) = [](auto& loop)
 {
     auto data = nbench::random_range(loop.number());
     auto v = std::vector<int>{data.begin(), data.end()};
