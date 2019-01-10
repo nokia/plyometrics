@@ -17,5 +17,15 @@ __attribute__((noinline)) void im_here()
     asm volatile("");
 }
 
+void clear_cache()
+{
+    static std::vector<char> memory(1024 * 1024 * 32);
+
+    for (auto& i : memory)
+    {
+        i = 0;
+        escape(&i);
+    }
+}
 
 }
