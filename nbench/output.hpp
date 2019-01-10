@@ -45,12 +45,6 @@ std::ostream& operator<<(std::ostream& os, demangle<T>)
     return os;
 }
 
-template<class T>
-struct json_object
-{
-    const T& object;
-};
-
 struct result_printer
 {
     virtual void print_result(const result&) = 0;

@@ -13,6 +13,7 @@
 #include "registry.hpp"
 #include "loop.hpp"
 #include "benchmark.hpp"
+#include "random.hpp"
 
 namespace nbench
 {
