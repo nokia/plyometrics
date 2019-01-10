@@ -5,7 +5,7 @@
 #include <list>
 #include <set>
 #include <unordered_set>
-#include <boost/container/flat_set.hpp>
+//#include <boost/container/flat_set.hpp>
 
 using namespace nbench;
 
@@ -47,15 +47,16 @@ BENCHMARK("allocate by malloc") = [](auto& loop)
     }
 };
 
-BENCHMARK("sorting vector").range(1e5, 1e6) = [](auto& loop)
+BENCHMARK("sorting vector").range(1, 1e8) = [](auto& loop)
 {
     auto data = nbench::random_range(loop.number());
     auto v = std::vector<int>{data.begin(), data.end()};
 
     while (loop)
     {
+        nbench::clear_cache();
         std::sort(v.begin(), v.end());
-        escape(v.data());
+        nbench::escape(v.data());
     }
 };
 
@@ -93,8 +94,7 @@ BENCHMARK("counting").types<std::vector<int>, std::list<int>>().range(1, 1e7) = 
 
 BENCHMARK("finding 42 in a set")
     .types<std::set<int>,
-           std::unordered_set<int>,
-           boost::container::flat_set<int>>()
+           std::unordered_set<int>>()
     .range(1e6, 1e8) = [](auto& loop)
 {
     auto v = loop.type();
