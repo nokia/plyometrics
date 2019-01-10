@@ -12,7 +12,7 @@ def visualize(grouped_data):
         for type_name, results in data.items():
             x = [sample['number'] for sample in results]
             y = [sample['time'] for sample in results]
-            plt.plot(x, y, label=type_name)
+            plt.plot(x, y, label=type_name, marker='o')
         plt.xlabel('number')
         plt.ylabel('time')
         plt.legend()
