@@ -10,3 +10,6 @@ target_link_libraries(example nbench)
 
 add_executable(example_basic examples/example_basic.cpp)
 target_link_libraries(example_basic nbench)
+
+add_executable(cpu_phenomenons examples/cpu_phenomenons.cpp)
+target_link_libraries(cpu_phenomenons nbench)
