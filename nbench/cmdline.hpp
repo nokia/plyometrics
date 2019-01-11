@@ -1,17 +1,18 @@
 #pragma once
 
+#include "optional.hpp"
+
 #include <map>
 #include <sstream>
 #include <set>
-#include <optional>
 
 namespace nbench
 {
 
-constexpr auto none = std::nullopt;
+constexpr auto none = nullopt;
 
 template<class T>
-using maybe = std::optional<T>;
+using maybe = optional<T>;
 
 template<class T>
 auto operator+(const T& a, const maybe<T>& b) -> maybe<T>
