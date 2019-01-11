@@ -56,5 +56,5 @@ void run_all(int argc, const char* argv[])
 #define UNIQUE_NAME_IMPL(prefix, counter)  prefix##counter
 #define UNIQUE_NAME(prefix, counter) UNIQUE_NAME_IMPL(prefix, counter)
 
-#define BENCHMARK(name) auto UNIQUE_NAME(nbench_benchmark_, __COUNTER__) = benchmark_builder<>{name}
+#define BENCHMARK(name) auto UNIQUE_NAME(nbench_benchmark_, __COUNTER__) = ::nbench::benchmark_builder<>{name}
 
