@@ -52,4 +52,4 @@ cmake --build build-release/ && ./build-release/example -b 'cache' -x | contrib/
 ```
 
 ![alt visualizing cache benchmark](screenshots/cache.png)
-![alt visualizing iteration benchmark](screenshots/iteration.png)
+![alt visualizing iteration benchmark](screenshots/iterating.png)
