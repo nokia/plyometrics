@@ -5,7 +5,6 @@
 #include <list>
 #include <set>
 #include <unordered_set>
-//#include <boost/container/flat_set.hpp>
 
 using namespace nbench;
 
@@ -123,6 +122,21 @@ BENCHMARK("counting").types<std::vector<int>, std::list<int>>().range(1, 1e7) = 
     {
         auto c = std::count(v.begin(), v.end(), 42);
         escape(&c);
+    }
+};
+
+BENCHMARK("iterating").types<
+    std::vector<int>, std::list<int>,
+    std::set<int>, std::unordered_set<int>
+>().range(1, 1e7) = [](auto& loop)
+{
+    auto data = nbench::sequence_range(loop.number());
+    auto container = loop.type(data.begin(), data.end());
+
+    while (loop)
+    {
+        for (auto i : container)
+            nbench::use(i);
     }
 };
 
