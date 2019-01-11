@@ -47,6 +47,20 @@ BENCHMARK("allocate by malloc") = [](auto& loop)
     }
 };
 
+BENCHMARK("sorting array") = [](auto& loop)
+{
+    constexpr std::size_t N = 1000;
+    auto data = nbench::random_range(N);
+    std::array<int, N> array;
+    std::copy(data.begin(), data.end(), array.begin());
+
+    while (loop)
+    {
+        std::sort(array.begin(), array.end());
+        //nbench::escape(v.data());
+    }
+};
+
 BENCHMARK("sorting vector").range(1, 1e8) = [](auto& loop)
 {
     auto data = nbench::random_range(loop.number());
