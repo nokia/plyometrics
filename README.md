@@ -53,3 +53,10 @@ cmake --build build-release/ && ./build-release/example -b 'cache' -x | contrib/
 
 ![alt visualizing cache benchmark](screenshots/cache.png)
 ![alt visualizing iteration benchmark](screenshots/iterating.png)
+
+
+Heap fragmentation
+------------------
+In the real world, your app's heap might be fragmented. To simulate this, you can use `nbench::fragmentize_heap` function.
+
+![alt heap fragmentation](screenshots/fragmentation.png)

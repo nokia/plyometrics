@@ -128,13 +128,17 @@ BENCHMARK("counting").types<std::vector<int>, std::list<int>>().range(1, 1e7) = 
 BENCHMARK("iterating").types<
     std::vector<int>, std::list<int>,
     std::set<int>, std::unordered_set<int>
->().range(1, 1e7) = [](auto& loop)
+>().range(1e6, 1e7) = [](auto& loop)
 {
+    // keep it in this scope
+    auto fragmentized = nbench::fragmentize_heap();
+
     auto data = nbench::sequence_range(loop.number());
     auto container = loop.type(data.begin(), data.end());
 
     while (loop)
     {
+        nbench::clear_cache();
         for (auto i : container)
             nbench::use(i);
     }
