@@ -52,6 +52,8 @@ cmake --build build-release/ && ./build-release/example -b 'cache' -x | contrib/
 ```
 
 ![alt visualizing cache benchmark](screenshots/cache.png)
+
+If your benchmark is type-parameterized, the chart will include all types used.
 ![alt visualizing iteration benchmark](screenshots/iterating.png)
 
 
