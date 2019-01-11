@@ -127,7 +127,6 @@ auto parse_options(int argc, const char* argv[])
     const auto opts = parse_option(app.data_left);
 
     return default_if_none(opts);
-//return options{};
 }
 
 }

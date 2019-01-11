@@ -16,9 +16,9 @@ int main(int argc, const char* argv[])
 And there you have it, now you can write your first benchmark.
 
 
-Basics
-------
-You can write new benchmarks using BENCHMARK macro.
+Writing simple benchmarks
+-------------------------
+You can write new benchmarks using `BENCHMARK` macro.
 
 ```cpp
 BENCHMARK("allocate by make_shared") = [](auto& loop)

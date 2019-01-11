@@ -75,4 +75,57 @@ private:
     std::size_t _size;
 };
 
+struct sequence_range
+{
+    explicit sequence_range(std::size_t size) : _size(size)
+    {
+    }
+
+    struct const_iterator
+    {
+        using difference_type = std::size_t;
+        using value_type = std::size_t;
+        using pointer = value_type*;
+        using reference = value_type&;
+        using iterator_category = std::forward_iterator_tag;
+
+        const_iterator(value_type v) : _value(v)
+        {
+        }
+
+        auto operator*() const
+        {
+            return _value;
+        }
+
+        auto& operator++()
+        {
+            _value++;
+            return *this;
+        }
+
+        bool operator!=(const const_iterator& other) const
+        {
+            return _value != other._value;
+        }
+
+    private:
+         std::size_t _value;
+    };
+
+    auto begin()
+    {
+        return const_iterator{_start};
+    }
+
+    auto end()
+    {
+        return const_iterator{_size};
+    }
+
+private:
+    std::size_t _start = 0;
+    std::size_t _size;
+};
+
 }
