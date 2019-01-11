@@ -54,9 +54,29 @@ BENCHMARK("sorting vector").range(1, 1e8) = [](auto& loop)
 
     while (loop)
     {
-        nbench::clear_cache();
         std::sort(v.begin(), v.end());
         nbench::escape(v.data());
+    }
+};
+
+int factorial(int i)
+{
+    return i <= 1 ? 1 : factorial(i - 1) * i;
+}
+
+BENCHMARK("using variable") = [](auto& loop)
+{
+    while (loop)
+    {
+        nbench::use(factorial(1000));
+    }
+};
+
+BENCHMARK("not using variable") = [](auto& loop)
+{
+    while (loop)
+    {
+        factorial(1000);
     }
 };
 

@@ -12,6 +12,12 @@ void escape(void* p)
     asm volatile("" : : "g"(p) : "memory");
 }
 
+template<class T>
+void use(T&& v)
+{
+    asm volatile("" : : "g"(v) : "memory");
+}
+
 __attribute__((noinline)) void im_here()
 {
     asm volatile("");
