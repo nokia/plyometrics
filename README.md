@@ -57,6 +57,23 @@ cmake --build build-release/ && ./build-release/example -b 'cache' -x | contrib/
 
 Heap fragmentation
 ------------------
-In the real world, your app's heap might be fragmented. To simulate this, you can use `nbench::fragmentize_heap` function.
+In the real world, your app's heap might be fragmented. To simulate this, you can use `nbench::fragmentize_heap` function. It returns an object which you should keep in the scope of your test.
+
+```cpp
+BENCHMARK("iterating").types<
+    std::vector<int>, std::list<int>,
+    std::set<int>, std::unordered_set<int>
+>().range(1e6, 1e7) = [](auto& loop)
+{
+    // keep it in this scope
+    auto fragmentized = nbench::fragmentize_heap();
+
+    auto data = nbench::sequence_range(loop.number());
+
+    while (loop)
+        for (auto i : loop.type(data.begin(), data.end()))
+            nbench::use(i);
+};
+```
 
 ![alt heap fragmentation](screenshots/fragmentation.png)
