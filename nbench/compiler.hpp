@@ -39,9 +39,26 @@ void clear_cache()
     }
 }
 
+struct allocated_chunk
+{
+    explicit allocated_chunk(std::size_t size)
+        : _mem(std::make_unique<char[]>(size))
+    {
+    }
+
+private:
+    std::unique_ptr<char[]> _mem;
+};
+
 struct fragmented_heap
 {
-    std::vector<std::unique_ptr<char[]>> _allocated;
+    void allocate(std::size_t size)
+    {
+        _allocated.push_back(allocated_chunk(size));
+    }
+
+private:
+    std::vector<allocated_chunk> _allocated;
 };
 
 auto fragmentize_heap()
@@ -50,6 +67,8 @@ auto fragmentize_heap()
     const auto min_size = 1;
     const auto max_size = 1024;
 
+    // half of it will be freed and half returned to the call scope
+    // this way a lot of holes should be created
     fragmented_heap heap;
     fragmented_heap temporary_heap;
 
@@ -59,11 +78,11 @@ auto fragmentize_heap()
     {
         const auto real_size = min_size + (std::abs(size) % max_size);
         total_size += real_size;
-        auto mem = std::make_unique<char[]>(real_size);
+
         if (size % 2)
-            heap._allocated.push_back(std::move(mem));
+            heap.allocate(real_size);
         else
-            temporary_heap._allocated.push_back(std::move(mem));
+            temporary_heap.allocate(real_size);
     }
 
     std::cerr << "size of fragmentized memory: " << total_size << std::endl;
