@@ -39,7 +39,7 @@ void clear_cache()
     }
 }
 
-struct fragmentized_heap
+struct fragmented_heap
 {
     std::vector<std::unique_ptr<char[]>> _allocated;
 };
@@ -50,8 +50,8 @@ auto fragmentize_heap()
     const auto min_size = 1;
     const auto max_size = 1024;
 
-    fragmentized_heap heap;
-    fragmentized_heap temporary_heap;
+    fragmented_heap heap;
+    fragmented_heap temporary_heap;
 
     std::size_t total_size = 0;
 
