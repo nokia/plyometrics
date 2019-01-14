@@ -8,44 +8,6 @@
 
 using namespace nbench;
 
-BENCHMARK("allocate by make_shared") = [](auto& loop)
-{
-    while (loop)
-    {
-        auto p = std::make_shared<int>(5);
-        escape(p.get());
-    }
-};
-
-BENCHMARK("allocate by make_unique") = [](auto& loop)
-{
-    while (loop)
-    {
-        auto p = std::make_unique<int>(5);
-        escape(p.get());
-    }
-};
-
-BENCHMARK("allocate by new and shared_ptr") = [](auto& loop)
-{
-    while (loop)
-    {
-        auto p = std::shared_ptr<int>(new int(5));
-        escape(p.get());
-    }
-};
-
-BENCHMARK("allocate by malloc") = [](auto& loop)
-{
-    while (loop)
-    {
-        auto* p = reinterpret_cast<int*>(malloc(sizeof(int)));
-        *p = 5;
-        escape(p);
-        free(p);
-    }
-};
-
 BENCHMARK("sorting array") = [](auto& loop)
 {
     constexpr std::size_t N = 1000;
@@ -102,25 +64,6 @@ BENCHMARK("counting").types<std::vector<int>, std::list<int>>().range(1, 1e7) = 
     {
         auto c = std::count(v.begin(), v.end(), 42);
         escape(&c);
-    }
-};
-
-BENCHMARK("iterating").types<
-    std::vector<int>, std::list<int>,
-    std::set<int>, std::unordered_set<int>
->().range(1e6, 1e7) = [](auto& loop)
-{
-    // keep it in this scope
-    auto fragmentized = nbench::fragmentize_heap();
-
-    auto data = nbench::sequence_range(loop.number());
-    auto container = loop.type(data.begin(), data.end());
-
-    while (loop)
-    {
-        nbench::clear_cache();
-        for (auto i : container)
-            nbench::use(i);
     }
 };
 
