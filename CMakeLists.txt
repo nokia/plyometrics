@@ -16,3 +16,6 @@ target_link_libraries(cpu_phenomenons nbench)
 
 add_executable(memory_fragmentation examples/memory_fragmentation.cpp)
 target_link_libraries(memory_fragmentation nbench)
+
+add_executable(compiler_hacks examples/compiler_hacks.cpp)
+target_link_libraries(compiler_hacks nbench)

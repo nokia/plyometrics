@@ -8,65 +8,6 @@
 
 using namespace nbench;
 
-BENCHMARK("sorting array") = [](auto& loop)
-{
-    constexpr std::size_t N = 1000;
-    auto data = nbench::random_range(N);
-    std::array<int, N> array;
-    std::copy(data.begin(), data.end(), array.begin());
-
-    while (loop)
-    {
-        std::sort(array.begin(), array.end());
-        //nbench::escape(v.data());
-    }
-};
-
-BENCHMARK("sorting vector").range(1, 1e8) = [](auto& loop)
-{
-    auto data = nbench::random_range(loop.number());
-    auto v = std::vector<int>{data.begin(), data.end()};
-
-    while (loop)
-    {
-        std::sort(v.begin(), v.end());
-        nbench::escape(v.data());
-    }
-};
-
-int factorial(int i)
-{
-    return i <= 1 ? 1 : factorial(i - 1) * i;
-}
-
-BENCHMARK("using variable") = [](auto& loop)
-{
-    while (loop)
-    {
-        nbench::use(factorial(1000));
-    }
-};
-
-BENCHMARK("not using variable") = [](auto& loop)
-{
-    while (loop)
-    {
-        factorial(1000);
-    }
-};
-
-BENCHMARK("counting").types<std::vector<int>, std::list<int>>().range(1, 1e7) = [](auto& loop)
-{
-    auto data = nbench::random_range(loop.number());
-    auto v = loop.type(data.begin(), data.end());
-
-    while (loop)
-    {
-        auto c = std::count(v.begin(), v.end(), 42);
-        escape(&c);
-    }
-};
-
 BENCHMARK("finding 42 in a set")
     .types<std::set<int>,
            std::unordered_set<int>>()
