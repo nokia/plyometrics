@@ -46,6 +46,7 @@ while (loop)
 
 Visualizing parametric tests
 ----------------------------
+You can visualize parametric tests by utility script from `contrib` directory. Just pass `-x` argument (JSON output) to your benchmark and pipe the result through `visualize.py`.
 
 ```
 cmake --build build-release/ && ./build-release/example -b 'cache' -x | contrib/visualize.py
@@ -53,7 +54,8 @@ cmake --build build-release/ && ./build-release/example -b 'cache' -x | contrib/
 
 ![alt visualizing cache benchmark](screenshots/cache.png)
 
-If your benchmark is type-parameterized, the chart will include all types used.
+If your benchmark is also type-parameterized, the chart will include all types used.
+
 ![alt visualizing iteration benchmark](screenshots/iterating.png)
 
 
@@ -77,5 +79,7 @@ BENCHMARK("iterating").types<
             nbench::use(i);
 };
 ```
+
+See the difference in iterating of various containers when memory is fragmented (right) and where it is not (left).
 
 ![alt heap fragmentation](screenshots/fragmentation.png)
