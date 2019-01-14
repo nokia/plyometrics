@@ -2,6 +2,8 @@
 
 #include "random.hpp"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 #ifndef __OPTIMIZE__
     #warning it appears that you are building with -O0
@@ -67,6 +69,30 @@ auto fragmentize_heap()
     std::cerr << "size of fragmentized memory: " << total_size << std::endl;
 
     return heap;
+}
+
+bool cpu_scaling_enabled()
+{
+    std::size_t cpu_number = 0;
+
+    while (true)
+    {
+        std::stringstream path;
+        path << "/sys/devices/system/cpu/cpu" << cpu_number << "/cpufreq/scaling_governor";
+        auto f = std::ifstream(path.str());
+
+        if (!f)
+            return false;
+
+        std::string governor;
+        f >> governor;
+        if (governor != "performance")
+            return true;
+
+        cpu_number++;
+    }
+
+    return false;
 }
 
 }
