@@ -20,12 +20,6 @@ auto operator+(const T& a, const maybe<T>& b) -> maybe<T>
     return b ? a + *b : a;
 }
 
-template<class T, class F>
-auto operator>>=(const maybe<T>& m, F f) -> decltype(f(std::declval<T>()))
-{
-    return m ? f(*m) : none;
-}
-
 struct parse_result
 {
     maybe<std::string> result;
