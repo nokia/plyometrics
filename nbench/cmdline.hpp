@@ -56,6 +56,20 @@ struct options
     std::map<std::string, std::string> named;
 };
 
+std::ostream& operator<<(std::ostream& os, const options& opts)
+{
+    if (opts.switches.empty() && opts.named.empty())
+        return os << "-";
+
+    for (const auto s : opts.switches)
+        os << "switch: " << s << ", ";
+
+    for (const auto s : opts.named)
+        os << "named: " << s.first << ": " << s.second << ", ";
+
+    return os;
+}
+
 auto operator+(const options& a, const options& b)
 {
     options r = a;
@@ -110,17 +124,75 @@ auto parse_option(const std::string& data) -> maybe<options>
     return none;
 }
 
+struct p_result
+{
+    int argc;
+    const char** argv;
+    maybe<std::string> value;
+};
+
+auto read_one(int argc, const char* argv[])
+{
+    if (!argc)
+        return p_result{0, argv, none};
+    return p_result{argc - 1, std::next(argv), argv[0]};
+}
+
+bool is_option(const maybe<std::string>& s)
+{
+    if (!s)
+        return false;
+
+    return s->size() > 2 && (*s)[0] == '-' && (*s)[1] == '-';
+}
+
+bool is_switch(const maybe<std::string>& s)
+{
+    if (!s)
+        return false;
+
+    return s->size() == 2 && (*s)[0] == '-';
+}
+
+auto try_read_value(int argc, const char** argv)
+{
+    if (!argc)
+        return p_result{argc, argv, none};
+
+    if (is_switch(argv[0]) || is_option(argv[0]))
+        return p_result{argc, argv, none};
+
+    return p_result{argc - 1, std::next(argv), argv[0]};
+}
+
 auto parse_options(int argc, const char* argv[])
 {
-    std::stringstream ss;
+    options opts;
 
-    for (int i = 0; i < argc; i++)
-        ss << argv[i] << " ";
+    const auto app = read_one(argc, argv);
 
-    const auto app = read_until_whitespace(ss.str());
-    const auto opts = parse_option(app.data_left);
+    if (app.value)
+    {
+        const auto opt = read_one(app.argc, app.argv);
 
-    return default_if_none(opts);
+        if (!opt.value)
+            return opts;
+
+        if (is_switch(opt.value) || is_option(opt.value))
+        {
+            const auto value = try_read_value(opt.argc, opt.argv);
+            if (value.value)
+            {
+                opts.named.emplace(*opt.value, *value.value);
+            }
+            else
+            {
+                opts.switches.emplace(*opt.value);
+            }
+        }
+    }
+
+    return opts;
 }
 
 }

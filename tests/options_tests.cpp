@@ -27,7 +27,7 @@ TEST_CASE("named option is recognized")
     const auto options = nbench::parse_options(std::size(argv), argv);
     CAPTURE(options);
 
-    CHECK(options.option("-a") == "a_value");
+    CHECK(options.option("-a") == "a value");
 }
 
 TEST_CASE("long named option is recognized")
@@ -36,6 +36,6 @@ TEST_CASE("long named option is recognized")
     const auto options = nbench::parse_options(std::size(argv), argv);
     CAPTURE(options);
 
-    CHECK(options.option("--long") == "a_value");
+    CHECK(options.option("--long") == "a value");
 }
 
