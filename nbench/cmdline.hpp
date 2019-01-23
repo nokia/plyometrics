@@ -131,7 +131,7 @@ auto try_read_value(const input_t& input)
 struct parsing_state
 {
     options opts;
-    p_result result;
+    input_t input;
 };
 
 auto parse_option(const input_t& input)
@@ -141,7 +141,7 @@ auto parse_option(const input_t& input)
     const auto opt = read_word(input);
 
     if (!opt.value)
-        return parsing_state{opts, opt};
+        return parsing_state{opts, opt.input};
 
     if (is_switch(opt.value) || is_option(opt.value))
     {
@@ -156,7 +156,7 @@ auto parse_option(const input_t& input)
             opts.switches.emplace(*opt.value);
         }
 
-        return parsing_state{opts, value};
+        return parsing_state{opts, value.input};
     }
 
     throw "expected a switch";
@@ -174,7 +174,7 @@ auto parse_options(int argc, const char* argv[])
         while (input)
         {
             const auto r = parse_option(input);
-            input = r.result.input;
+            input = r.input;
             opts = opts + r.opts;
         }
     }
