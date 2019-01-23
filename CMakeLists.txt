@@ -11,7 +11,7 @@ add_executable(example_basic examples/example_basic.cpp)
 target_link_libraries(example_basic nbench)
 
 add_executable(cpu_phenomenons examples/cpu_phenomenons.cpp)
-target_link_libraries(cpu_phenomenons nbench)
+target_link_libraries(cpu_phenomenons nbench pthread)
 
 add_executable(memory_fragmentation examples/memory_fragmentation.cpp)
 target_link_libraries(memory_fragmentation nbench)

@@ -48,7 +48,7 @@ struct registry
 private:
     auto benchmark_regex(const options& opts) const -> std::regex
     {
-        auto s = opts.option("b");
+        auto s = opts.option("-b");
         if (s)
             return std::regex{*s};
         return std::regex{".*"};

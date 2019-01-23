@@ -106,7 +106,7 @@ private:
 
 auto make_result_printer(const options& opts) -> std::unique_ptr<result_printer>
 {
-    if (opts.has_switch("x"))
+    if (opts.has_switch("-x") || opts.has_switch("--json"))
         return std::make_unique<json_printer>();
     return std::make_unique<printer_for_humans>();
 }
