@@ -42,7 +42,7 @@ struct random_range
             return _value;
         }
 
-        __attribute__((noinline)) auto& operator++()
+        auto& operator++()
         {
             _value = (*_engine)();
             _index++;
