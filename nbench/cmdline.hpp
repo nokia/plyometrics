@@ -72,18 +72,6 @@ auto operator+(const options& a, const options& b)
     return r;
 }
 
-template<class T>
-auto none_if_empty(const T& value) -> maybe<T>
-{
-    return value.empty() ? maybe<T>{none} : value;
-}
-
-template<class T>
-auto default_if_none(const maybe<T>& value) -> T
-{
-    return value ? *value : T{};
-}
-
 struct input_t
 {
     int argc;
@@ -150,26 +138,26 @@ auto parse_option(const input_t& input)
 {
     options opts;
 
-        const auto opt = read_word(input);
+    const auto opt = read_word(input);
 
-        if (!opt.value)
-            return parsing_state{opts, opt};
+    if (!opt.value)
+        return parsing_state{opts, opt};
 
-        if (is_switch(opt.value) || is_option(opt.value))
+    if (is_switch(opt.value) || is_option(opt.value))
+    {
+        const auto value = try_read_value(opt.input.argc, opt.input.argv);
+
+        if (value.value)
         {
-            const auto value = try_read_value(opt.input.argc, opt.input.argv);
-
-            if (value.value)
-            {
-                opts.named.emplace(*opt.value, *value.value);
-            }
-            else
-            {
-                opts.switches.emplace(*opt.value);
-            }
-
-            return parsing_state{opts, value};
+            opts.named.emplace(*opt.value, *value.value);
         }
+        else
+        {
+            opts.switches.emplace(*opt.value);
+        }
+
+        return parsing_state{opts, value};
+    }
 
     throw "expected a switch";
 }
@@ -183,13 +171,11 @@ auto parse_options(int argc, const char* argv[])
     if (app.value)
     {
         auto input = app.input;
-        while (true)
+        while (input)
         {
             const auto r = parse_option(input);
             input = r.result.input;
             opts = opts + r.opts;
-            if (!input)
-                break;
         }
     }
 
