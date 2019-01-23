@@ -22,21 +22,22 @@ BENCHMARK("cache").range(1, 1e9) = [](auto& loop)
     }
 };
 
-template<std::size_t CacheSize>
-struct not_exactly_independent_values
+template<std::size_t LineSize>
+struct two_aligned_variables
 {
     alignas(64) std::atomic<int> a;
-    alignas(CacheSize) int b;
+    alignas(LineSize) int b;
 };
 
-BENCHMARK("false sharing").range(1, 64).types<not_exactly_independent_values<1>, not_exactly_independent_values<64>>() = [](auto& loop)
+BENCHMARK("false sharing").range(1, 64).types<two_aligned_variables<1>, two_aligned_variables<64>>() = [](auto& loop)
 {
-    auto data = loop.type();
+    decltype(loop.type()) data;
+
     std::atomic<bool> running(true);
 
     std::vector<std::thread> threads;
     for (auto i = 0u; i < loop.number(); i++)
-        threads.emplace_back([&] { while(running.load()) nbench::use(data.a.load()); });
+        threads.emplace_back([&] { while(running.load()) nbench::use(data.a++); });
 
     while (loop)
     {

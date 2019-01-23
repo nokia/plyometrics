@@ -86,6 +86,11 @@ struct input_t
     {
         return input_t{argc - 1, std::next(argv)};
     }
+
+    auto current() const
+    {
+        return std::string{argv[0]};
+    }
 };
 
 struct p_result
@@ -98,7 +103,7 @@ auto read_word(const input_t& input)
 {
     if (!input)
         return p_result{input, none};
-    return p_result{input.next(), std::string{input.argv[0]}};
+    return p_result{input.next(), input.current()};
 }
 
 bool is_option(const maybe<std::string>& s)
@@ -122,10 +127,10 @@ auto try_read_value(const input_t& input)
     if (!input)
         return p_result{input, none};
 
-    if (is_switch(input.argv[0]) || is_option(input.argv[0]))
+    if (is_switch(input.current()) || is_option(input.current()))
         return p_result{input, none};
 
-    return p_result{input.next(), std::string{input.argv[0]}};
+    return p_result{input.next(), input.current()};
 }
 
 struct parsing_state
