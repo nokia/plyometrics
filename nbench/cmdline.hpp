@@ -98,7 +98,7 @@ auto read_word(const input_t& input)
 {
     if (!input)
         return p_result{input, none};
-    return p_result{input.next(), input.argv[0]};
+    return p_result{input.next(), std::string{input.argv[0]}};
 }
 
 bool is_option(const maybe<std::string>& s)
@@ -125,7 +125,7 @@ auto try_read_value(const input_t& input)
     if (is_switch(input.argv[0]) || is_option(input.argv[0]))
         return p_result{input, none};
 
-    return p_result{input.next(), input.argv[0]};
+    return p_result{input.next(), std::string{input.argv[0]}};
 }
 
 struct parsing_state
