@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
+add_subdirectory(tests)
+
 add_library(nbench INTERFACE)
 target_include_directories(nbench INTERFACE .)
 target_compile_options(nbench INTERFACE -Wall -Wextra -pedantic)
