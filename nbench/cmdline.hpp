@@ -117,15 +117,15 @@ bool is_switch(const maybe<std::string>& s)
     return s->size() == 2 && (*s)[0] == '-';
 }
 
-auto try_read_value(int argc, const char** argv)
+auto try_read_value(const input_t& input)
 {
-    if (!argc)
-        return p_result{argc, argv, none};
+    if (!input)
+        return p_result{input, none};
 
-    if (is_switch(argv[0]) || is_option(argv[0]))
-        return p_result{argc, argv, none};
+    if (is_switch(input.argv[0]) || is_option(input.argv[0]))
+        return p_result{input, none};
 
-    return p_result{input_t{argc - 1, std::next(argv)}, argv[0]};
+    return p_result{input.next(), input.argv[0]};
 }
 
 struct parsing_state
@@ -145,7 +145,7 @@ auto parse_option(const input_t& input)
 
     if (is_switch(opt.value) || is_option(opt.value))
     {
-        const auto value = try_read_value(opt.input.argc, opt.input.argv);
+        const auto value = try_read_value(opt.input);
 
         if (value.value)
         {
