@@ -42,16 +42,12 @@ auto make_n_threads(std::size_t n, F f)
 BENCHMARK("false sharing").range(1, 64).types<two_aligned_variables<1>, two_aligned_variables<64>>() = [](auto& loop)
 {
     decltype(loop.type()) data;
-
     std::atomic<bool> running(true);
-
     auto threads = make_n_threads(loop.number(), [&] { while (running.load()) nbench::use(data.a++); });
 
     while (loop)
-    {
         for (int i = 0; i < 100; i++)
             nbench::use(data.b++);
-    }
 
     running.store(false);
 
