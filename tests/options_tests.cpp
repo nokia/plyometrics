@@ -39,3 +39,13 @@ TEST_CASE("long named option is recognized")
     CHECK(options.option("--long") == "a value");
 }
 
+TEST_CASE("combined options are suported")
+{
+    const char* argv[] = {"app", "-a", "-b"};
+    const auto options = nbench::parse_options(std::size(argv), argv);
+    CAPTURE(options);
+
+    CHECK(options.has_switch("-a"));
+    CHECK(options.has_switch("-b"));
+}
+

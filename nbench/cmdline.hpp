@@ -20,12 +20,6 @@ auto operator+(const T& a, const maybe<T>& b) -> maybe<T>
     return b ? a + *b : a;
 }
 
-struct parse_result
-{
-    maybe<std::string> result;
-    std::string data_left;
-};
-
 struct options
 {
     options() = default;
@@ -90,44 +84,15 @@ auto default_if_none(const maybe<T>& value) -> T
     return value ? *value : T{};
 }
 
-auto read_until_whitespace(const std::string& data) -> parse_result
-{
-    if (data.empty())
-        return parse_result{none, data};
-
-    if (data[0] == ' ')
-        return parse_result{none, data.substr(1)};
-
-    const auto leaf = read_until_whitespace(data.substr(1));
-    return parse_result{data.substr(0, 1) + leaf.result, leaf.data_left};
-}
-
-auto parse_option(const std::string& data) -> maybe<options>
-{
-    if (!data.empty() && data[0] == '-')
-    {
-        options opts;
-
-        const auto name = read_until_whitespace(data.substr(1));
-        const auto value = read_until_whitespace(name.data_left);
-
-        if (name.result and value.result)
-            opts.named.emplace(*name.result, *value.result);
-        else if (name.result)
-            opts.switches.emplace(*name.result);
-        else
-            throw 1;
-
-        return opts + parse_option(value.data_left);
-    }
-
-    return none;
-}
-
-struct p_result
+struct input_t
 {
     int argc;
     const char** argv;
+};
+
+struct p_result
+{
+    input_t input;
     maybe<std::string> value;
 };
 
@@ -135,7 +100,7 @@ auto read_one(int argc, const char* argv[])
 {
     if (!argc)
         return p_result{0, argv, none};
-    return p_result{argc - 1, std::next(argv), argv[0]};
+    return p_result{input_t{argc - 1, std::next(argv)}, argv[0]};
 }
 
 bool is_option(const maybe<std::string>& s)
@@ -162,7 +127,41 @@ auto try_read_value(int argc, const char** argv)
     if (is_switch(argv[0]) || is_option(argv[0]))
         return p_result{argc, argv, none};
 
-    return p_result{argc - 1, std::next(argv), argv[0]};
+    return p_result{input_t{argc - 1, std::next(argv)}, argv[0]};
+}
+
+struct parsing_state
+{
+    options opts;
+    p_result result;
+};
+
+auto parse_option(int argc, const char** argv)
+{
+    options opts;
+
+        const auto opt = read_one(argc, argv);
+
+        if (!opt.value)
+            return parsing_state{opts, opt};
+
+        if (is_switch(opt.value) || is_option(opt.value))
+        {
+            const auto value = try_read_value(opt.input.argc, opt.input.argv);
+
+            if (value.value)
+            {
+                opts.named.emplace(*opt.value, *value.value);
+            }
+            else
+            {
+                opts.switches.emplace(*opt.value);
+            }
+
+            return parsing_state{opts, value};
+        }
+
+    throw "expected a switch";
 }
 
 auto parse_options(int argc, const char* argv[])
@@ -173,22 +172,12 @@ auto parse_options(int argc, const char* argv[])
 
     if (app.value)
     {
-        const auto opt = read_one(app.argc, app.argv);
-
-        if (!opt.value)
-            return opts;
-
-        if (is_switch(opt.value) || is_option(opt.value))
+        while (true)
         {
-            const auto value = try_read_value(opt.argc, opt.argv);
-            if (value.value)
-            {
-                opts.named.emplace(*opt.value, *value.value);
-            }
-            else
-            {
-                opts.switches.emplace(*opt.value);
-            }
+            const auto r = parse_option(app.input.argc, app.input.argv);
+            opts = opts + r.opts;
+            if (!r.result.input.argc)
+                break;
         }
     }
 
