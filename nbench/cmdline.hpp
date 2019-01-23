@@ -88,6 +88,16 @@ struct input_t
 {
     int argc;
     const char** argv;
+
+    operator bool() const
+    {
+        return argc;
+    }
+
+    auto next() const
+    {
+        return input_t{argc - 1, std::next(argv)};
+    }
 };
 
 struct p_result
@@ -96,11 +106,11 @@ struct p_result
     maybe<std::string> value;
 };
 
-auto read_one(int argc, const char* argv[])
+auto read_word(const input_t& input)
 {
-    if (!argc)
-        return p_result{0, argv, none};
-    return p_result{input_t{argc - 1, std::next(argv)}, argv[0]};
+    if (!input)
+        return p_result{input, none};
+    return p_result{input.next(), input.argv[0]};
 }
 
 bool is_option(const maybe<std::string>& s)
@@ -136,11 +146,11 @@ struct parsing_state
     p_result result;
 };
 
-auto parse_option(int argc, const char** argv)
+auto parse_option(const input_t& input)
 {
     options opts;
 
-        const auto opt = read_one(argc, argv);
+        const auto opt = read_word(input);
 
         if (!opt.value)
             return parsing_state{opts, opt};
@@ -168,15 +178,17 @@ auto parse_options(int argc, const char* argv[])
 {
     options opts;
 
-    const auto app = read_one(argc, argv);
+    const auto app = read_word(input_t{argc, argv});
 
     if (app.value)
     {
+        auto input = app.input;
         while (true)
         {
-            const auto r = parse_option(app.input.argc, app.input.argv);
+            const auto r = parse_option(input);
+            input = r.result.input;
             opts = opts + r.opts;
-            if (!r.result.input.argc)
+            if (!input)
                 break;
         }
     }
