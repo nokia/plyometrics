@@ -29,15 +29,23 @@ struct two_aligned_variables
     alignas(LineSize) int b;
 };
 
+template<class F>
+auto make_n_threads(std::size_t n, F f)
+{
+    std::vector<std::thread> threads;
+    threads.reserve(n);
+    for (auto i = 0u; i < n; i++)
+        threads.emplace_back(f);
+    return threads;
+}
+
 BENCHMARK("false sharing").range(1, 64).types<two_aligned_variables<1>, two_aligned_variables<64>>() = [](auto& loop)
 {
     decltype(loop.type()) data;
 
     std::atomic<bool> running(true);
 
-    std::vector<std::thread> threads;
-    for (auto i = 0u; i < loop.number(); i++)
-        threads.emplace_back([&] { while(running.load()) nbench::use(data.a++); });
+    auto threads = make_n_threads(loop.number(), [&] { while (running.load()) nbench::use(data.a++); });
 
     while (loop)
     {
