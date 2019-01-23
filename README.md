@@ -1,3 +1,5 @@
+`nbench` is microbenmarking library targeted for embedded software development. It comes with a number of examples that can be used for rapid testing of new architectures.
+
 Installation
 ------------
 `nbench` is a header-only library so while the samples are compiled using CMake, you can easily integrate it into you own, customized build system by just copying `nbench` directory and optionaly the `contrib` which is the place for some usefull scripts.
