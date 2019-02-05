@@ -85,8 +85,6 @@ auto fragmentize_heap()
             temporary_heap.allocate(real_size);
     }
 
-    std::cerr << "size of fragmentized memory: " << total_size << std::endl;
-
     return heap;
 }
 
