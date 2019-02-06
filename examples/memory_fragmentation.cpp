@@ -5,18 +5,11 @@
 #include <set>
 #include <unordered_set>
 
-struct spec
+NBENCHMARK_P(iterating_over_various_containers_with_fragmented_memory,
+             nbench::spec::with_types<std::vector<int>, std::list<int>, std::set<int>, std::unordered_set<int>>
+                         ::with_range<1, 512>)
 {
-    using types = std::tuple<std::vector<int>, std::list<int>, std::set<int>, std::unordered_set<int>>;
-    static constexpr std::size_t from = 1;
-    static constexpr std::size_t to = 1000;
-};
-
-NBENCHMARK_P(iterating_over_various_containers, spec)
-{
-    // keep it in this scope
-    auto fragmentized = nbench::fragmentize_heap();
-
+    auto frag = nbench::fragmentize_heap();
     auto data = nbench::sequence_range(loop.number());
     auto container = loop.type(data.begin(), data.end());
 
@@ -25,26 +18,9 @@ NBENCHMARK_P(iterating_over_various_containers, spec)
             nbench::use(i);
 }
 
-BENCHMARK("iterating").types<
-    std::vector<int>, std::list<int>,
-    std::set<int>, std::unordered_set<int>
->().range(1e6, 1e7) = [](auto& loop)
-{
-    // keep it in this scope
-    auto fragmentized = nbench::fragmentize_heap();
-
-    auto data = nbench::sequence_range(loop.number());
-    auto container = loop.type(data.begin(), data.end());
-
-    while (loop)
-        for (auto i : container)
-            nbench::use(i);
-};
-
-BENCHMARK("iterating - fragmented memory").types<
-    std::vector<int>, std::list<int>,
-    std::set<int>, std::unordered_set<int>
->().range(1e6, 1e7) = [](auto& loop)
+NBENCHMARK_P(iterating_over_various_containers,
+             nbench::spec::with_types<std::vector<int>, std::list<int>, std::set<int>, std::unordered_set<int>>
+                         ::with_range<1, 512>)
 {
     auto data = nbench::sequence_range(loop.number());
     auto container = loop.type(data.begin(), data.end());
@@ -52,7 +28,7 @@ BENCHMARK("iterating - fragmented memory").types<
     while (loop)
         for (auto i : container)
             nbench::use(i);
-};
+}
 
 int main(int argc, const char* argv[])
 {

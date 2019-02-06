@@ -17,14 +17,18 @@ struct abstract_benchmark
 template<class Types = std::tuple<nothing>, std::size_t From = 1, std::size_t To = 1>
 struct default_spec
 {
-    using types = std::tuple<nothing>;
-    static constexpr std::size_t from = 1;
-    static constexpr std::size_t to = 1;
+    using types = Types;
+    static constexpr std::size_t from = From;
+    static constexpr std::size_t to = To;
+
+    template<class... T>
+    using with_types = default_spec<std::tuple<T...>, from, to>;
+
+    template<std::size_t F, std::size_t T>
+    using with_range = default_spec<types, F, T>;
 };
 
-struct spec
-{
-};
+using spec = default_spec<>;
 
 template<class Crtp, class Spec = default_spec<>>
 struct benchmark_base : public abstract_benchmark
