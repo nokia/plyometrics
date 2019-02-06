@@ -18,3 +18,6 @@ target_link_libraries(memory_fragmentation nbench)
 
 add_executable(compiler_hacks examples/compiler_hacks.cpp)
 target_link_libraries(compiler_hacks nbench)
+
+add_executable(look_up_in_map examples/look_up_in_map.cpp)
+target_link_libraries(look_up_in_map nbench)
