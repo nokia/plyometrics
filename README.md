@@ -20,22 +20,22 @@ And there you have it, now you can write your first benchmark.
 
 Writing simple benchmarks
 -------------------------
-You can write new benchmarks using `BENCHMARK` macro.
+You can write new benchmarks using `NBENCHMARK` or `NBENCHMARK_P` macro.
 
 ```cpp
-BENCHMARK("allocate by make_shared") = [](auto& loop)
+NBENCHMARK(allocate_by_make_shared)
 {
     while (loop)
     {
         auto p = std::make_shared<int>(5);
-        escape(p.get());
+        nbench::escape(p.get());
     }
-};
+}
 ```
 
-`BENCHMARK`'s argument is the name of your test that will later be used when presenting the results. Next, `nbench` is expecting that you will assign a functor to it. Functor must take one argument - the loop. Benchmarks can be type-parameterized, therefore `loop`'s type may vary and it's a good practice to use `auto`.
+`BENCHMARK`'s argument is the name of your test that will later be used when presenting the results. Within benchmark's body, a variable called `loop`, for now, we're using it to construct `while` loop where you put time critical code you want to measure.
 
-Every benchmark must be run in a loop so the measurements can be averaged. For this, you can use `loop`'s implicit conversion to `bool`. This construct also helps when you want to initilize your benchmark with some code that you not not necessarily want to measure. For instance, you want to fill the `std::vector` with some data and measure how long it takes to sort it:
+If your test requires some initialization, say, generating some dataset, you can simply do that outside the `while` loop, like this:
 
 ```cpp
 auto random_data = nbench::random_range(100);
