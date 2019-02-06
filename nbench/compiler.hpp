@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <sys/utsname.h>
 
 #ifndef __OPTIMIZE__
     #warning it appears that you are building with -O0
@@ -110,6 +111,13 @@ bool cpu_scaling_enabled()
     }
 
     return false;
+}
+
+std::string cpu_model()
+{
+    utsname buf;
+    uname(&buf);
+    return buf.machine;
 }
 
 }

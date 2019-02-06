@@ -25,6 +25,8 @@ struct registry
 
     void run_all(const options& opts)
     {
+        std::cerr << "CPU: " << cpu_model() << std::endl;
+
         try
         {
             if (cpu_scaling_enabled())
