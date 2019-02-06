@@ -74,7 +74,7 @@ void run_all(int argc, const char* argv[])
 #define NBENCHMARK(name) \
     struct name : nbench::benchmark_base<name> \
     { \
-        template<class T> void body(T&); \
+        template<class T> __attribute__((noinline)) void body(T&); \
     }; \
     auto NBENCH_ADDER_##name = nbench::benchmark_adder{name::construct()}; \
     template<class T> void name::body(T& loop)
@@ -82,7 +82,7 @@ void run_all(int argc, const char* argv[])
 #define NBENCHMARK_P(name, ...) \
     struct name : nbench::benchmark_base<name, __VA_ARGS__> \
     { \
-        template<class T> void body(T&); \
+        template<class T> __attribute__((noinline)) void body(T&); \
     }; \
     auto NBENCH_ADDER_##name = nbench::benchmark_adder{name::construct()}; \
     template<class T> void name::body(T& loop)
