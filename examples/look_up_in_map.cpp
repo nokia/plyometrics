@@ -6,9 +6,10 @@
  */
 
 #include "nbench/nbench.hpp"
+
 #include <map>
 #include <unordered_map>
-
+#include <list>
 
 BENCHMARK("lookup").types<
     std::map<int, int>, std::unordered_map<int,int>
@@ -23,6 +24,14 @@ BENCHMARK("lookup").types<
         for(auto i : sequence_data)
             nbench::use(container[i]);
 };
+
+NBENCHMARK_P(constructing_sequence_containers, nbench::spec::with_types<std::vector<int>, std::list<int>>::with_range<1, 128>)
+{
+    auto sequence_data = nbench::sequence_range(loop.number());
+
+    while (loop)
+        nbench::use(loop.type(sequence_data.begin(), sequence_data.end()));
+}
 
 int main(int argc, const char* argv[])
 {

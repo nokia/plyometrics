@@ -59,6 +59,39 @@ NBENCHMARK_P(constructing_stuff, nbench::spec::with_types<int, float, Widget>)
 
 Above example will generate three tests, each with different type.
 
+Another type of parameter is the *number*. It can be constructed using `nbench::spec::with_range<>` which takes two parameters: `from` and `to` and uses them to create a geometric range of numbers by multiplying previous value by 2.
+
+```cpp
+NBENCHMARK_P(constructing_sequence_containers, nbench::spec::with_types<std::vector<int>, std::list<int>>::with_range<1, 128>)
+{
+    auto sequence_data = nbench::sequence_range(loop.number());
+
+    while (loop)
+        nbench::use(loop.type(sequence_data.begin(), sequence_data.end()));
+}
+```
+
+this will give you following tests:
+
+```
+constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [1]: 42ns
+constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [2]: 62ns
+constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [4]: 100ns
+constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [8]: 229ns
+constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [16]: 444ns
+constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [32]: 847ns
+constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [64]: 1667ns
+constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [128]: 3336ns
+constructing_sequence_containers / std::vector<int, std::allocator<int> > [1]: 43ns
+constructing_sequence_containers / std::vector<int, std::allocator<int> > [2]: 43ns
+constructing_sequence_containers / std::vector<int, std::allocator<int> > [4]: 44ns
+constructing_sequence_containers / std::vector<int, std::allocator<int> > [8]: 46ns
+constructing_sequence_containers / std::vector<int, std::allocator<int> > [16]: 49ns
+constructing_sequence_containers / std::vector<int, std::allocator<int> > [32]: 53ns
+constructing_sequence_containers / std::vector<int, std::allocator<int> > [64]: 61ns
+constructing_sequence_containers / std::vector<int, std::allocator<int> > [128]: 76ns
+```
+
 
 Visualizing parametric tests
 ----------------------------
