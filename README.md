@@ -86,6 +86,11 @@ constructing_sequence_containers / std::vector<int, std::allocator<int> > [128]:
 ```
 
 
+Generating datasets
+-------------------
+Maybe you noticed `nbench::sequence_range` in previous example. It can be used to generate lazy ranges that can be used to feed measured algorithm. It takes `size` as an argument. Similar range is `nbench::random_range` but it gives pseudo-random numbers.
+
+
 Visualizing parametric tests
 ----------------------------
 You can visualize parametric tests by utility script from `contrib` directory. Just pass `-x` argument (JSON output) to your benchmark and pipe the result through `visualize.py`.
