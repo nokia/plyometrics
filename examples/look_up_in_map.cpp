@@ -33,6 +33,16 @@ NBENCHMARK_P(constructing_sequence_containers, nbench::spec::with_types<std::vec
         nbench::use(loop.type(sequence_data.begin(), sequence_data.end()));
 }
 
+NBENCHMARK_P(iterating_though_sequence_containers, nbench::spec::with_types<std::vector<int>, std::list<int>>::with_range<1, 128>)
+{
+    auto sequence_data = nbench::sequence_range(loop.number());
+    auto container = loop.type(sequence_data.begin(), sequence_data.end());
+
+    while (loop)
+        for(auto i : container)
+            nbench::use(i);
+}
+
 int main(int argc, const char* argv[])
 {
     nbench::run_all(argc, argv);
