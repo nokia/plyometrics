@@ -14,13 +14,19 @@ struct abstract_benchmark
     virtual ~abstract_benchmark() = default;
 };
 
+template<class Types = std::tuple<nothing>, std::size_t From = 1, std::size_t To = 1>
 struct default_spec
 {
     using types = std::tuple<nothing>;
-    static constexpr range_t range = range_t{1, 1};
+    static constexpr std::size_t from = 1;
+    static constexpr std::size_t to = 1;
 };
 
-template<class Crtp, class Spec = default_spec>
+struct spec
+{
+};
+
+template<class Crtp, class Spec = default_spec<>>
 struct benchmark_base : public abstract_benchmark
 {
     static auto construct()
@@ -48,7 +54,7 @@ private:
     template<class Type = nothing>
     auto run_with_type(result_printer& printer) -> nothing
     {
-        for (auto i = Spec::range.from; i <= Spec::range.to; i *= 2)
+        for (auto i = Spec::from; i <= Spec::to; i *= 2)
         {
             auto l = loop<Type>{name(), i};
             static_cast<Crtp*>(this)->body(l);

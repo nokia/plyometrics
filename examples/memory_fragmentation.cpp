@@ -8,7 +8,8 @@
 struct spec
 {
     using types = std::tuple<std::vector<int>, std::list<int>, std::set<int>, std::unordered_set<int>>;
-    static constexpr nbench::range_t range = nbench::range_t{1, 10000};
+    static constexpr std::size_t from = 1;
+    static constexpr std::size_t to = 1000;
 };
 
 NBENCHMARK_P(iterating_over_various_containers, spec)
