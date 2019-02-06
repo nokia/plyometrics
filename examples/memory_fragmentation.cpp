@@ -5,6 +5,25 @@
 #include <set>
 #include <unordered_set>
 
+struct spec
+{
+    using types = std::tuple<std::vector<int>, std::list<int>, std::set<int>, std::unordered_set<int>>;
+    static constexpr nbench::range_t range = nbench::range_t{1, 10000};
+};
+
+NBENCHMARK_P(iterating_over_various_containers, spec)
+{
+    // keep it in this scope
+    auto fragmentized = nbench::fragmentize_heap();
+
+    auto data = nbench::sequence_range(loop.number());
+    auto container = loop.type(data.begin(), data.end());
+
+    while (loop)
+        for (auto i : container)
+            nbench::use(i);
+}
+
 BENCHMARK("iterating").types<
     std::vector<int>, std::list<int>,
     std::set<int>, std::unordered_set<int>

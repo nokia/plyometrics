@@ -10,7 +10,7 @@ namespace nbench
 template<class T = int>
 struct loop : public result
 {
-    explicit loop(const char* name, std::size_t number) : _name(name), number_(number)
+    explicit loop(std::string name, std::size_t number) : _name(name), number_(number)
     {
     }
 
@@ -56,7 +56,7 @@ struct loop : public result
     }
 
 private:
-    const char* _name;
+    std::string _name;
     clock::time_point _start = clock::now();
     clock::time_point _end;
     std::size_t _iterations = 0;

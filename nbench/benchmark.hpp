@@ -14,6 +14,51 @@ struct abstract_benchmark
     virtual ~abstract_benchmark() = default;
 };
 
+struct default_spec
+{
+    using types = std::tuple<nothing>;
+    static constexpr range_t range = range_t{1, 1};
+};
+
+template<class Crtp, class Spec = default_spec>
+struct benchmark_base : public abstract_benchmark
+{
+    static auto construct()
+    {
+        return std::make_unique<Crtp>();
+    }
+
+    void run(result_printer& printer) override
+    {
+        run<typename Spec::types>(printer, std::make_index_sequence<std::tuple_size<typename Spec::types>::value>{});
+    }
+
+    auto name() const -> std::string override
+    {
+        return typeid(*this).name();
+    }
+
+private:
+    template<class Types, std::size_t... Ints>
+    auto run(result_printer& printer, std::index_sequence<Ints...>)
+    {
+        swallow(run_with_type<typename std::tuple_element<Ints, Types>::type>(printer)...);
+    }
+
+    template<class Type = nothing>
+    auto run_with_type(result_printer& printer) -> nothing
+    {
+        for (auto i = Spec::range.from; i <= Spec::range.to; i *= 2)
+        {
+            auto l = loop<Type>{name(), i};
+            static_cast<Crtp*>(this)->body(l);
+            printer.print_result(l);
+        }
+
+        return nothing{};
+    }
+};
+
 template<class Body = nothing, class... Types>
 struct benchmark_t : public abstract_benchmark
 {

@@ -70,3 +70,20 @@ void run_all(int argc, const char* argv[])
 
 #define BENCHMARK(name) auto UNIQUE_NAME(nbench_benchmark_, __COUNTER__) = ::nbench::benchmark_builder<>{name}
 
+
+#define NBENCHMARK(name) \
+    struct name : nbench::benchmark_base<name> \
+    { \
+        template<class T> void body(T&); \
+    }; \
+    auto NBENCH_ADDER_##name = nbench::benchmark_adder{name::construct()}; \
+    template<class T> void name::body(T& loop)
+
+#define NBENCHMARK_P(name, params) \
+    struct name : nbench::benchmark_base<name, params> \
+    { \
+        template<class T> void body(T&); \
+    }; \
+    auto NBENCH_ADDER_##name = nbench::benchmark_adder{name::construct()}; \
+    template<class T> void name::body(T& loop)
+

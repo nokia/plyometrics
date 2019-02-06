@@ -2,6 +2,15 @@
 
 #include <memory>
 
+NBENCHMARK(allocate_by_make_shared)
+{
+    while (loop)
+    {
+        auto p = std::make_shared<int>(5);
+        nbench::escape(p.get());
+    }
+}
+
 BENCHMARK("allocate by make_shared") = [](auto& loop)
 {
     while (loop)
