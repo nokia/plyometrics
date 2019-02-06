@@ -13,7 +13,7 @@
 
 using containers_spec = nbench::spec::with_range<1, 128>;
 using associative_containers_spec = containers_spec::with_types<std::map<int, int>, std::unordered_map<int, int>>;
-using sequence_containers_spec = containers_spec::with_types<std::vector<int>, std::list<int>>;
+using sequence_containers_spec = containers_spec::with_types<std::vector<int>, std::list<int>, std::set<int>>;
 
 NBENCHMARK_P(lookup_associative_containers, associative_containers_spec)
 {
