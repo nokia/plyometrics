@@ -33,7 +33,7 @@ NBENCHMARK(allocate_by_make_shared)
 }
 ```
 
-`BENCHMARK`'s argument is the name of your test that will later be used when presenting the results. Within benchmark's body, a variable called `loop`, for now, we're using it to construct `while` loop where you put time critical code you want to measure.
+`NBENCHMARK`'s argument is the name of your test that will later be used when presenting the results. Within benchmark's body, a variable called `loop`, for now, we're using it to construct `while` loop where you put time critical code you want to measure.
 
 If your test requires some initialization, say, generating some dataset, you can simply do that outside the `while` loop, like this:
 
@@ -44,6 +44,20 @@ auto v = std::vector<int>{random_data.begin(), random_data.end()};
 while (loop)
     std::sort(v.begin(), v.end());
 ```
+
+Parametric tests
+----------------
+Tests can be parametrized with two ways: *type* and *number*. Both can be done using `NBENCHMARK_P` macro and a trait called `spec`. `spec` can be defined using `nbench::spec`. After defining some types, they are accessible through `loop.type()` function. `loop.type()` constructs current type, forwarding its parameters to the constructor.
+
+```cpp
+NBENCHMARK_P(constructing_stuff, nbench::spec::with_types<int, float, Widget>)
+{
+    while (loop)
+        loop.type(1);
+}
+```
+
+Above example will generate three tests, each with different type.
 
 
 Visualizing parametric tests
