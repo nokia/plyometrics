@@ -76,19 +76,12 @@ this will give you following tests:
 ```
 constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [1]: 42ns
 constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [2]: 62ns
-constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [4]: 100ns
-constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [8]: 229ns
-constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [16]: 444ns
-constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [32]: 847ns
-constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [64]: 1667ns
+[...]
 constructing_sequence_containers / std::__cxx11::list<int, std::allocator<int> > [128]: 3336ns
+
 constructing_sequence_containers / std::vector<int, std::allocator<int> > [1]: 43ns
 constructing_sequence_containers / std::vector<int, std::allocator<int> > [2]: 43ns
-constructing_sequence_containers / std::vector<int, std::allocator<int> > [4]: 44ns
-constructing_sequence_containers / std::vector<int, std::allocator<int> > [8]: 46ns
-constructing_sequence_containers / std::vector<int, std::allocator<int> > [16]: 49ns
-constructing_sequence_containers / std::vector<int, std::allocator<int> > [32]: 53ns
-constructing_sequence_containers / std::vector<int, std::allocator<int> > [64]: 61ns
+[...]
 constructing_sequence_containers / std::vector<int, std::allocator<int> > [128]: 76ns
 ```
 
