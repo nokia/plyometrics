@@ -1,19 +1,14 @@
-/*
- * find_in_container.cpp
- * Copyright (C) 2019 bsadowsk <bsadowsk@bsadowsk>
- *
- * Distributed under terms of the MIT license.
- */
-
 #include "nbench/nbench.hpp"
 
 #include <map>
-#include <unordered_map>
 #include <list>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 using containers_spec = nbench::spec::with_range<1, 128>;
 using associative_containers_spec = containers_spec::with_types<std::map<int, int>, std::unordered_map<int, int>>;
-using sequence_containers_spec = containers_spec::with_types<std::vector<int>, std::list<int>, std::set<int>>;
+using sequence_containers_spec = containers_spec::with_types<std::vector<int>, std::list<int>, std::set<int>, std::unordered_set<int>>;
 
 NBENCHMARK_P(lookup_associative_containers, associative_containers_spec)
 {
