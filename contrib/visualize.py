@@ -6,13 +6,19 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 
 
+def trim(s, max_len=100):
+    if len(s) > max_len:
+        return s[:max_len] + '...'
+    return s
+
+
 def visualize(grouped_data):
     for name, data in grouped_data.items():
         plt.title(name)
         for type_name, results in data.items():
             x = [sample['number'] for sample in results]
             y = [sample['time'] for sample in results]
-            plt.plot(x, y, label=type_name, marker='o')
+            plt.plot(x, y, label=trim(type_name), marker='o')
         plt.xlabel('number')
         plt.ylabel('time')
         plt.legend()
