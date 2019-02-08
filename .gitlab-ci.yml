@@ -1,0 +1,30 @@
+stages:
+  - build
+  - test
+  - benchmark
+
+build:
+  stage: build
+  before_script:
+    - git submodule sync --recursive
+    - git submodule update --init --recursive
+  script:
+    - mkdir build-debug ; mkdir build-release
+    - pushd build-debug ; cmake -DCMAKE_BUILD_TYPE=Debug .. ; popd
+    - pushd build-release; cmake -DCMAKE_BUILD_TYPE=Release .. ; popd
+    - cmake --build build-debug
+    - cmake --build build-release
+  artifacts:
+    paths:
+      - build-debug
+      - build-release
+
+test:
+  stage: test
+  script:
+    - build-debug/nbench_tests
+
+#benchmark:
+#  stage: benchmark
+#  script:
+#    - build-release/benchmarks/map_benchmark
