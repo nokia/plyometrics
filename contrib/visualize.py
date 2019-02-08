@@ -13,6 +13,8 @@ def trim(s, max_len=100):
 
 
 def visualize(grouped_data):
+    plt.style.use('ggplot')
+    plt.rcParams["figure.figsize"] = (10,8)
     for name, data in grouped_data.items():
         plt.title(name)
         for type_name, results in data.items():
