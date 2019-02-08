@@ -19,7 +19,7 @@ build:
 test:
   stage: test
   script:
-    - build-debug/nbench_tests
+    - build-debug/tests/nbench_tests
 
 #benchmark:
 #  stage: benchmark
