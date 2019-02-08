@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import operator
 import json
 import sys
 from collections import defaultdict
@@ -12,12 +13,16 @@ def trim(s, max_len=100):
     return s
 
 
+def sorted_by_key(dic):
+    return sorted(dic, key=operator.itemgetter(0))
+
+
 def visualize(grouped_data):
     plt.style.use('ggplot')
     plt.rcParams["figure.figsize"] = (10,8)
     for name, data in grouped_data.items():
         plt.title(name)
-        for type_name, results in data.items():
+        for type_name, results in sorted_by_key(data.items()):
             x = [sample['number'] for sample in results]
             y = [sample['time'] for sample in results]
             plt.plot(x, y, label=trim(type_name), marker='o')
