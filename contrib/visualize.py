@@ -3,6 +3,7 @@
 import operator
 import json
 import sys
+from argparse import ArgumentParser
 from collections import defaultdict
 import matplotlib.pyplot as plt
 
@@ -40,6 +41,7 @@ def group(data):
 
 
 def main():
+    parser = ArgumentParser(description='Draws chars out of benchmark data')
     try:
         data = json.load(sys.stdin)
         visualize(group(data))
