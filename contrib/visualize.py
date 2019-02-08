@@ -3,6 +3,7 @@
 import operator
 import json
 import sys
+from os import path
 from argparse import ArgumentParser
 from collections import defaultdict
 import matplotlib.pyplot as plt
@@ -18,7 +19,7 @@ def sorted_by_key(dic):
     return sorted(dic, key=operator.itemgetter(0))
 
 
-def visualize(grouped_data):
+def visualize(grouped_data, output_directory=None, overwrite=False):
     plt.style.use('ggplot')
     plt.rcParams["figure.figsize"] = (10,8)
     for name, data in grouped_data.items():
@@ -30,7 +31,15 @@ def visualize(grouped_data):
         plt.xlabel('number')
         plt.ylabel('time')
         plt.legend()
-        plt.show()
+
+        if output_directory is None:
+            plt.show()
+        else:
+            filename = path.join(output_directory, name + '.png')
+            if overwrite or not path.exists(filename):
+                plt.savefig(filename)
+            else:
+                print('{} already exists, use -f to force overwrite'.format(filename))
 
 
 def group(data):
@@ -42,9 +51,13 @@ def group(data):
 
 def main():
     parser = ArgumentParser(description='Draws chars out of benchmark data')
+    parser.add_argument('-o', dest='output_directory', help='directory where chart images will be dumped')
+    parser.add_argument('-f', action='store_true', dest='overwrite', help='force files to be overwritten')
+    args = parser.parse_args()
+
     try:
         data = json.load(sys.stdin)
-        visualize(group(data))
+        visualize(group(data), output_directory=args.output_directory, overwrite=args.overwrite)
     except json.decoder.JSONDecodeError as e:
         print(e)
         print("Did you forgot -x switch?")
