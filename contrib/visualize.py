@@ -22,7 +22,9 @@ def sorted_by_key(dic):
 def visualize(grouped_data, output_directory=None, overwrite=False):
     plt.style.use('ggplot')
     plt.rcParams["figure.figsize"] = (10,8)
+
     for name, data in grouped_data.items():
+        plt.clf()
         plt.title(name)
         for type_name, results in sorted_by_key(data.items()):
             x = [sample['number'] for sample in results]
