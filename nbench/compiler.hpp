@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 #include <sys/utsname.h>
 
 #ifndef __OPTIMIZE__
@@ -62,6 +63,9 @@ private:
     std::vector<allocated_chunk> _allocated;
 };
 
+/**
+ * Allocate random memory chunks and free half of them to achieve memory fragmentation.
+ */
 auto fragmentize_heap()
 {
     const auto allocs = 1000000;
