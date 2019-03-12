@@ -3,6 +3,8 @@
 #include "cmdline.hpp"
 #include "benchmark.hpp"
 
+#include <memory>
+#include <iostream>
 #include <vector>
 #include <memory>
 #include <regex>
@@ -32,6 +34,7 @@ struct registry
             if (cpu_scaling_enabled())
             {
                 std::cerr << "CPU frequency scaling seems to be enabled, this might affect your benchmarks!\n";
+
             }
         }
         catch (const std::exception& ex)

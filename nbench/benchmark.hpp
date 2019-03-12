@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "utils.hpp"
 #include "cmdline.hpp"
 #include "loop.hpp"

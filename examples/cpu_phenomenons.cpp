@@ -48,7 +48,7 @@ BENCHMARK("false sharing").range(1, 64).types<two_aligned_variables<1>, two_alig
     while (loop)
         for (int i = 0; i < 100; i++)
             nbench::use(data.b++);
-
+    
     running.store(false);
 
     for (auto& t : threads)

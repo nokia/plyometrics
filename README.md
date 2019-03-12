@@ -1,4 +1,22 @@
-`nbench` is microbenmarking library targeted for embedded software development. It comes with a number of examples that can be used for rapid testing of new architectures.
+`nbench` is a header-only microbenmarking library targeted for embedded software development.
+
+
+Quick start
+-----------
+You can use various examples to see `nbench` in action. They come with `CMakeLists.txt` file so compiling them is as simple as:
+
+```
+mkdir build-release
+cd build-release && cmake -DCMAKE_BUILD_TYPE=Release .. && cd ..
+cmake --build build-release
+```
+
+Note that we're building with `Release` mode, this is needed because you want you code to be optimized as closely as in the production but it also has some drawbacks that will be covered later. After that you can run one of the benchmarks, for example:
+
+```
+./build-release/examples/cpu_phenomenons
+```
+
 
 Installation
 ------------
