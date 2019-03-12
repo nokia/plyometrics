@@ -55,6 +55,40 @@ BENCHMARK("false sharing").range(1, 64).types<two_aligned_variables<1>, two_alig
         t.join();
 };
 
+template<class T>
+struct non_atomic
+{
+    non_atomic(T value) : _value(value)
+    {
+    }
+
+    void operator++(int)
+    {
+        _value++;
+    }
+
+    T load() const
+    {
+        return _value;
+    }
+
+private:
+    int _value;
+};
+
+using atomic_spec = nbench::spec::with_types<non_atomic<int>, std::atomic<int>>;
+
+NBENCHMARK_P(read_and_write_to_atomic, atomic_spec)
+{
+    auto value = loop.type(0);
+
+    while (loop)
+    {
+        value++;
+        nbench::use(value.load());
+    }
+}
+
 int main(int argc, const char* argv[])
 {
     nbench::run_all(argc, argv);
