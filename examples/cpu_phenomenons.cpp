@@ -80,7 +80,7 @@ using atomic_spec = nbench::spec::with_types<non_atomic<int>, std::atomic<int>>;
 
 NBENCHMARK_P(read_and_write_to_atomic, atomic_spec)
 {
-    auto value = loop.type(0);
+    decltype(loop.type()) value(0);
 
     while (loop)
     {
