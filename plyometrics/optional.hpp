@@ -8,7 +8,7 @@
 
         #include <optional>
 
-        namespace nbench
+        namespace plyometrics
         {
             using std::optional;
             using std::nullopt;
@@ -18,7 +18,7 @@
 
         #include <experimental/optional>
 
-        namespace nbench
+        namespace plyometrics
         {
             using std::experimental::optional;
             using std::experimental::nullopt;

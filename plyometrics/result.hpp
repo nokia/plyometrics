@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace nbench
+namespace plyometrics
 {
 
 struct result

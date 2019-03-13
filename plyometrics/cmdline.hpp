@@ -6,7 +6,7 @@
 #include <sstream>
 #include <set>
 
-namespace nbench
+namespace plyometrics
 {
 
 constexpr auto none = nullopt;

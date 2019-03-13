@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nbench
+namespace plyometrics
 {
 
 struct range_t

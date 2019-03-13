@@ -9,7 +9,7 @@
 #include <memory>
 #include <regex>
 
-namespace nbench
+namespace plyometrics
 {
 
 struct registry
@@ -64,7 +64,7 @@ private:
 
 void run_all(int argc, const char* argv[])
 {
-    auto opts = nbench::parse_options(argc, argv);
+    auto opts = plyometrics::parse_options(argc, argv);
     registry::get().run_all(opts);
 }
 
@@ -73,22 +73,22 @@ void run_all(int argc, const char* argv[])
 #define UNIQUE_NAME_IMPL(prefix, counter)  prefix##counter
 #define UNIQUE_NAME(prefix, counter) UNIQUE_NAME_IMPL(prefix, counter)
 
-#define BENCHMARK(name) auto UNIQUE_NAME(nbench_benchmark_, __COUNTER__) = ::nbench::benchmark_builder<>{name}
+#define BENCHMARK(name) auto UNIQUE_NAME(plyometrics_benchmark_, __COUNTER__) = ::plyometrics::benchmark_builder<>{name}
 
 
 #define NBENCHMARK(name) \
-    struct name : nbench::benchmark_base<name> \
+    struct name : plyometrics::benchmark_base<name> \
     { \
         template<class T> __attribute__((noinline)) void body(T&); \
     }; \
-    auto NBENCH_ADDER_##name = nbench::benchmark_adder{name::construct()}; \
+    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{name::construct()}; \
     template<class T> void name::body(T& loop)
 
 #define NBENCHMARK_P(name, ...) \
-    struct name : nbench::benchmark_base<name, __VA_ARGS__> \
+    struct name : plyometrics::benchmark_base<name, __VA_ARGS__> \
     { \
         template<class T> __attribute__((noinline)) void body(T&); \
     }; \
-    auto NBENCH_ADDER_##name = nbench::benchmark_adder{name::construct()}; \
+    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{name::construct()}; \
     template<class T> void name::body(T& loop)
 

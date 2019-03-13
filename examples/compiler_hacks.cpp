@@ -1,4 +1,4 @@
-#include "nbench/nbench.hpp"
+#include "plyometrics/nbench.hpp"
 
 int factorial(int i)
 {
@@ -9,7 +9,7 @@ BENCHMARK("using variable") = [](auto& loop)
 {
     while (loop)
     {
-        nbench::use(factorial(1000));
+        plyometrics::use(factorial(1000));
     }
 };
 
@@ -23,5 +23,5 @@ BENCHMARK("not using variable") = [](auto& loop)
 
 int main(int argc, const char* argv[])
 {
-    nbench::run_all(argc, argv);
+    plyometrics::run_all(argc, argv);
 }

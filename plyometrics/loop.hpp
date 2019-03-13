@@ -4,7 +4,7 @@
 #include "result.hpp"
 #include "clock.hpp"
 
-namespace nbench
+namespace plyometrics
 {
 
 template<class T = int>

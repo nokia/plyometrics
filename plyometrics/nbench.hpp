@@ -15,7 +15,7 @@
 #include "benchmark.hpp"
 #include "random.hpp"
 
-namespace nbench
+namespace plyometrics
 {
 
 struct benchmark_adder

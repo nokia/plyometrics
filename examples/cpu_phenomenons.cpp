@@ -1,10 +1,10 @@
-#include "nbench/nbench.hpp"
+#include "plyometrics/nbench.hpp"
 #include <atomic>
 #include <thread>
 
 BENCHMARK("cache").range(1, 1e9) = [](auto& loop)
 {
-    auto random = nbench::random_range(10000);
+    auto random = plyometrics::random_range(10000);
     auto indicies = std::vector<std::size_t>{};
 
     for (auto r : random)
@@ -17,7 +17,7 @@ BENCHMARK("cache").range(1, 1e9) = [](auto& loop)
         for (auto idx : indicies)
         {
             v[idx]++;
-            nbench::escape(&v[idx]);
+            plyometrics::escape(&v[idx]);
         }
     }
 };
@@ -43,11 +43,11 @@ BENCHMARK("false sharing").range(1, 64).types<two_aligned_variables<1>, two_alig
 {
     decltype(loop.type()) data;
     std::atomic<bool> running(true);
-    auto threads = make_n_threads(loop.number(), [&] { while (running.load()) nbench::use(data.a++); });
+    auto threads = make_n_threads(loop.number(), [&] { while (running.load()) plyometrics::use(data.a++); });
 
     while (loop)
         for (int i = 0; i < 100; i++)
-            nbench::use(data.b++);
+            plyometrics::use(data.b++);
     
     running.store(false);
 
@@ -76,7 +76,7 @@ private:
     int _value;
 };
 
-using atomic_spec = nbench::spec::with_types<non_atomic<int>, std::atomic<int>>;
+using atomic_spec = plyometrics::spec::with_types<non_atomic<int>, std::atomic<int>>;
 
 NBENCHMARK_P(read_and_write_to_atomic, atomic_spec)
 {
@@ -85,11 +85,11 @@ NBENCHMARK_P(read_and_write_to_atomic, atomic_spec)
     while (loop)
     {
         value++;
-        nbench::use(value.load());
+        plyometrics::use(value.load());
     }
 }
 
 int main(int argc, const char* argv[])
 {
-    nbench::run_all(argc, argv);
+    plyometrics::run_all(argc, argv);
 }

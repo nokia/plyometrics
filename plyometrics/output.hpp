@@ -8,7 +8,7 @@
 
 #include <cxxabi.h>
 
-namespace nbench
+namespace plyometrics
 {
 
 template<class Rep, class Period>

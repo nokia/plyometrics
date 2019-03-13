@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace nbench
+namespace plyometrics
 {
 
 using clock = std::chrono::high_resolution_clock;

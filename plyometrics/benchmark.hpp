@@ -6,7 +6,7 @@
 #include "cmdline.hpp"
 #include "loop.hpp"
 
-namespace nbench
+namespace plyometrics
 {
 
 struct abstract_benchmark

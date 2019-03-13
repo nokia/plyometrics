@@ -11,7 +11,7 @@
     #warning it appears that you are building with -O0
 #endif
 
-namespace nbench
+namespace plyometrics
 {
 
 void escape(void* p)
