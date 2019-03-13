@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.5)
 
 add_executable(example_basic example_basic.cpp)
-target_link_libraries(example_basic nbench)
+target_link_libraries(example_basic plyometrics)
 
 add_executable(cpu_phenomenons cpu_phenomenons.cpp)
-target_link_libraries(cpu_phenomenons nbench pthread)
+target_link_libraries(cpu_phenomenons plyometrics pthread)
 
 add_executable(memory_fragmentation memory_fragmentation.cpp)
-target_link_libraries(memory_fragmentation nbench)
+target_link_libraries(memory_fragmentation plyometrics)
 
 add_executable(compiler_hacks compiler_hacks.cpp)
-target_link_libraries(compiler_hacks nbench)
+target_link_libraries(compiler_hacks plyometrics)
 
 add_executable(look_up_in_map look_up_in_map.cpp)
-target_link_libraries(look_up_in_map nbench)
+target_link_libraries(look_up_in_map plyometrics)
