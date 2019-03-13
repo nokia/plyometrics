@@ -1,9 +1,9 @@
-`nbench` is a header-only microbenmarking library targeted for embedded software development.
+`polyometrics` is a header-only microbenmarking library targeted for embedded software development.
 
 
 Quick start
 -----------
-You can use various examples to see `nbench` in action. They come with `CMakeLists.txt` file so compiling them is as simple as:
+You can use various examples to see `polyometrics` in action. They come with `CMakeLists.txt` file so compiling them is as simple as:
 
 ```
 mkdir build-release
@@ -20,16 +20,16 @@ Note that we're building with `Release` mode, this is needed because you want yo
 
 Installation
 ------------
-`nbench` is a header-only library so while the samples are compiled using CMake, you can easily integrate it into you own, customized build system by just copying `nbench` directory and optionaly the `contrib` which is the place for some usefull scripts.
+`polyometrics` is a header-only library so while the samples are compiled using CMake, you can easily integrate it into you own, customized build system by just copying `nbench` directory and optionaly the `contrib` which is the place for some usefull scripts.
 
-When you have the code in place, you can include `nbench.hpp` header and write the `main` function.
+When you have the code in place, you can include `polyometrics.hpp` header and write the `main` function.
 
 ```cpp
-#include "nbench/nbench.hpp"
+#include "polyometrics/nbench.hpp"
 
 int main(int argc, const char* argv[])
 {
-    nbench::run_all(argc, argv);
+    polyometrics::run_all(argc, argv);
 }
 ```
 
@@ -46,7 +46,7 @@ NBENCHMARK(allocate_by_make_shared)
     while (loop)
     {
         auto p = std::make_shared<int>(5);
-        nbench::escape(p.get());
+        polyometrics::escape(p.get());
     }
 }
 ```
@@ -56,7 +56,7 @@ NBENCHMARK(allocate_by_make_shared)
 If your test requires some initialization, say, generating some dataset, you can simply do that outside the `while` loop, like this:
 
 ```cpp
-auto random_data = nbench::random_range(100);
+auto random_data = polyometrics::random_range(100);
 auto v = std::vector<int>{random_data.begin(), random_data.end()};
 
 while (loop)
@@ -65,10 +65,10 @@ while (loop)
 
 Parametric tests
 ----------------
-Tests can be parametrized with two ways: *type* and *number*. Both can be done using `NBENCHMARK_P` macro and a trait called `spec`. `spec` can be defined using `nbench::spec`. After defining some types, they are accessible through `loop.type()` function. `loop.type()` constructs current type, forwarding its parameters to the constructor.
+Tests can be parametrized with two ways: *type* and *number*. Both can be done using `NBENCHMARK_P` macro and a trait called `spec`. `spec` can be defined using `polyometrics::spec`. After defining some types, they are accessible through `loop.type()` function. `loop.type()` constructs current type, forwarding its parameters to the constructor.
 
 ```cpp
-NBENCHMARK_P(constructing_stuff, nbench::spec::with_types<int, float, Widget>)
+NBENCHMARK_P(constructing_stuff, polyometrics::spec::with_types<int, float, Widget>)
 {
     while (loop)
         loop.type(1);
@@ -77,15 +77,15 @@ NBENCHMARK_P(constructing_stuff, nbench::spec::with_types<int, float, Widget>)
 
 Above example will generate three tests, each with different type.
 
-Another type of parameter is the *number*. It can be constructed using `nbench::spec::with_range<>` which takes two parameters: `from` and `to` and uses them to create a geometric range of numbers by multiplying previous value by 2.
+Another type of parameter is the *number*. It can be constructed using `polyometrics::spec::with_range<>` which takes two parameters: `from` and `to` and uses them to create a geometric range of numbers by multiplying previous value by 2.
 
 ```cpp
-NBENCHMARK_P(constructing_sequence_containers, nbench::spec::with_types<std::vector<int>, std::list<int>>::with_range<1, 128>)
+NBENCHMARK_P(constructing_sequence_containers, polyometrics::spec::with_types<std::vector<int>, std::list<int>>::with_range<1, 128>)
 {
-    auto sequence_data = nbench::sequence_range(loop.number());
+    auto sequence_data = polyometrics::sequence_range(loop.number());
 
     while (loop)
-        nbench::use(loop.type(sequence_data.begin(), sequence_data.end()));
+        polyometrics::use(loop.type(sequence_data.begin(), sequence_data.end()));
 }
 ```
 
@@ -106,7 +106,7 @@ constructing_sequence_containers / std::vector<int, std::allocator<int> > [128]:
 
 Generating datasets
 -------------------
-Maybe you noticed `nbench::sequence_range` in previous example. It can be used to generate lazy ranges that can be used to feed measured algorithm. It takes `size` as an argument. Similar range is `nbench::random_range` but it gives pseudo-random numbers.
+Maybe you noticed `polyometrics::sequence_range` in previous example. It can be used to generate lazy ranges that can be used to feed measured algorithm. It takes `size` as an argument. Similar range is `nbench::random_range` but it gives pseudo-random numbers.
 
 
 Visualizing parametric tests
@@ -126,7 +126,7 @@ If your benchmark is also type-parameterized, the chart will include all types u
 
 Heap fragmentation
 ------------------
-In the real world, your app's heap might be fragmented. To simulate this, you can use `nbench::fragmentize_heap` function. It returns an object which you should keep in the scope of your test.
+In the real world, your app's heap might be fragmented. To simulate this, you can use `polyometrics::fragmentize_heap` function. It returns an object which you should keep in the scope of your test.
 
 ```cpp
 BENCHMARK("iterating").types<
@@ -135,13 +135,13 @@ BENCHMARK("iterating").types<
 >().range(1e6, 1e7) = [](auto& loop)
 {
     // keep it in this scope
-    auto fragmentized = nbench::fragmentize_heap();
+    auto fragmentized = polyometrics::fragmentize_heap();
 
-    auto data = nbench::sequence_range(loop.number());
+    auto data = polyometrics::sequence_range(loop.number());
 
     while (loop)
         for (auto i : loop.type(data.begin(), data.end()))
-            nbench::use(i);
+            polyometrics::use(i);
 };
 ```
 
