@@ -1,4 +1,4 @@
-#include "plyometrics/nbench.hpp"
+#include "plyometrics/plyometrics.hpp"
 
 #include <map>
 #include <list>
