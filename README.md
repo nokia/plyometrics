@@ -3,6 +3,8 @@
 
 Quick start
 -----------
+The idea of microbenchmarks is that instead of full-scale deployment, you take a small portion of you application (or even simplified model of the particular problem) and measure the time needed to execute it.
+
 You can use various examples to see `polyometrics` in action. They come with `CMakeLists.txt` file so compiling them is as simple as:
 
 ```
