@@ -84,6 +84,9 @@ void run_all(int argc, const char* argv[])
     auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{name::construct()}; \
     template<class T> void name::body(T& loop)
 
+/**
+ * Define parametric benchmark, second argument should be a `spec` with the parameters.
+ */
 #define NBENCHMARK_P(name, ...) \
     struct name : plyometrics::benchmark_base<name, __VA_ARGS__> \
     { \

@@ -39,7 +39,9 @@ auto make_n_threads(std::size_t n, F f)
     return threads;
 }
 
-BENCHMARK("false sharing").range(1, 64).types<two_aligned_variables<1>, two_aligned_variables<64>>() = [](auto& loop)
+using false_sharing_spec = plyometrics::spec::with_types<two_aligned_variables<1>, two_aligned_variables<64>>::with_range<1, 64>;
+
+NBENCHMARK_P(false_sharing, false_sharing_spec)
 {
     decltype(loop.type()) data;
     std::atomic<bool> running(true);
