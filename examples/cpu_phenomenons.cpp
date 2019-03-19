@@ -57,7 +57,7 @@ NBENCHMARK_P(false_sharing, false_sharing_spec)
 
     for (auto& t : threads)
         t.join();
-};
+}
 
 template<class T>
 struct non_atomic
