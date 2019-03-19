@@ -2,7 +2,9 @@
 #include <atomic>
 #include <thread>
 
-BENCHMARK("cache").range(1, 1e9) = [](auto& loop)
+using cache_spec = plyometrics::spec::with_range<1, 100000>;
+
+NBENCHMARK_P(cache, cache_spec)
 {
     auto random = plyometrics::random_range(10000);
     auto indicies = std::vector<std::size_t>{};
@@ -20,7 +22,7 @@ BENCHMARK("cache").range(1, 1e9) = [](auto& loop)
             plyometrics::escape(&v[idx]);
         }
     }
-};
+}
 
 template<std::size_t LineSize>
 struct two_aligned_variables

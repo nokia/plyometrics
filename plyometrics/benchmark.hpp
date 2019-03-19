@@ -30,6 +30,9 @@ struct default_spec
     using with_range = default_spec<types, F, T>;
 };
 
+/**
+ * Define parameters for the benchmarks
+ */
 using spec = default_spec<>;
 
 template<class Crtp, class Spec = default_spec<>>
