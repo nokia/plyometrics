@@ -1,4 +1,5 @@
 #include "plyometrics/plyometrics.hpp"
+
 #include <atomic>
 #include <thread>
 
@@ -41,18 +42,24 @@ auto make_n_threads(std::size_t n, F f)
     return threads;
 }
 
-using false_sharing_spec = plyometrics::spec::with_types<two_aligned_variables<1>, two_aligned_variables<64>>::with_range<1, 64>;
+using false_sharing_spec = plyometrics::spec::with_types<
+        two_aligned_variables<1>,
+        two_aligned_variables<64>>::with_range<1, 64>;
 
 NBENCHMARK_P(false_sharing, false_sharing_spec)
 {
     decltype(loop.type()) data;
     std::atomic<bool> running(true);
-    auto threads = make_n_threads(loop.number(), [&] { while (running.load()) plyometrics::use(data.a++); });
+
+    auto threads = make_n_threads(loop.number(), [&] {
+        while (running.load())
+            plyometrics::use(data.a++);
+    });
 
     while (loop)
         for (int i = 0; i < 100; i++)
             plyometrics::use(data.b++);
-    
+
     running.store(false);
 
     for (auto& t : threads)
@@ -80,7 +87,8 @@ private:
     int _value;
 };
 
-using atomic_spec = plyometrics::spec::with_types<non_atomic<int>, std::atomic<int>>;
+using atomic_spec =
+        plyometrics::spec::with_types<non_atomic<int>, std::atomic<int>>;
 
 NBENCHMARK_P(read_and_write_to_atomic, atomic_spec)
 {

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <memory>
-
-#include "utils.hpp"
 #include "cmdline.hpp"
 #include "loop.hpp"
+#include "utils.hpp"
+
+#include <memory>
 
 namespace plyometrics
 {
@@ -16,7 +16,9 @@ struct abstract_benchmark
     virtual ~abstract_benchmark() = default;
 };
 
-template<class Types = std::tuple<nothing>, std::size_t From = 1, std::size_t To = 1>
+template<class Types = std::tuple<nothing>,
+         std::size_t From = 1,
+         std::size_t To = 1>
 struct default_spec
 {
     using types = Types;
@@ -45,7 +47,10 @@ struct benchmark_base : public abstract_benchmark
 
     void run(result_printer& printer) override
     {
-        run<typename Spec::types>(printer, std::make_index_sequence<std::tuple_size<typename Spec::types>::value>{});
+        run<typename Spec::types>(
+                printer,
+                std::make_index_sequence<
+                        std::tuple_size<typename Spec::types>::value>{});
     }
 
     auto name() const -> std::string override
@@ -57,7 +62,8 @@ private:
     template<class Types, std::size_t... Ints>
     auto run(result_printer& printer, std::index_sequence<Ints...>)
     {
-        swallow(run_with_type<typename std::tuple_element<Ints, Types>::type>(printer)...);
+        swallow(run_with_type<typename std::tuple_element<Ints, Types>::type>(
+                printer)...);
     }
 
     template<class Type = nothing>
@@ -65,7 +71,7 @@ private:
     {
         for (auto i = Spec::from; i <= Spec::to; i *= 2)
         {
-            auto l = loop<Type>{name(), i};
+            auto l = loop<Type>{ name(), i };
             static_cast<Crtp*>(this)->body(l);
             printer.print_result(l);
         }
@@ -94,13 +100,15 @@ struct benchmark_t : public abstract_benchmark
 
 private:
     template<class U = std::tuple<Types...>>
-    auto run(result_printer& printer) -> typename std::enable_if<std::tuple_size<U>::value != 0>::type
+    auto run(result_printer& printer) ->
+            typename std::enable_if<std::tuple_size<U>::value != 0>::type
     {
         swallow(run_with_type<Types>(printer)...);
     }
 
     template<class U = std::tuple<Types...>>
-    auto run(result_printer& printer) -> typename std::enable_if<std::tuple_size<U>::value == 0>::type
+    auto run(result_printer& printer) ->
+            typename std::enable_if<std::tuple_size<U>::value == 0>::type
     {
         run_with_type<nothing>(printer);
     }
@@ -110,7 +118,7 @@ private:
     {
         for (auto i = _range.from; i <= _range.to; i *= 2)
         {
-            auto l = loop<Type>{_name, i};
+            auto l = loop<Type>{ _name, i };
             _body(l);
             printer.print_result(l);
         }
@@ -123,4 +131,4 @@ private:
     Body _body;
 };
 
-}
+} // namespace plyometrics
