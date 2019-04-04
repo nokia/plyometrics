@@ -1,11 +1,11 @@
-`polyometrics` is a header-only microbenmarking library targeted for embedded software development.
+`plyometrics` is a header-only microbenmarking library targeted for embedded software development.
 
 
 Quick start
 -----------
 The idea of microbenchmarks is that instead of full-scale deployment, you take a small portion of you application (or even simplified model of the particular problem) and measure the time needed to execute it.
 
-You can use various examples to see `polyometrics` in action. They come with `CMakeLists.txt` file so compiling them is as simple as:
+You can use various examples to see `plyometrics` in action. They come with `CMakeLists.txt` file so compiling them is as simple as:
 
 ```
 mkdir build-release
@@ -22,16 +22,16 @@ Note that we're building with `Release` mode, this is needed because you want yo
 
 Installation
 ------------
-`polyometrics` is a header-only library so while the samples are compiled using CMake, you can easily integrate it into you own, customized build system by just copying `nbench` directory and optionaly the `contrib` which is the place for some usefull scripts.
+`plyometrics` is a header-only library so while the samples are compiled using CMake, you can easily integrate it into you own, customized build system by just copying `nbench` directory and optionaly the `contrib` which is the place for some usefull scripts.
 
-When you have the code in place, you can include `polyometrics.hpp` header and write the `main` function.
+When you have the code in place, you can include `plyometrics.hpp` header and write the `main` function.
 
 ```cpp
-#include "polyometrics/nbench.hpp"
+#include "plyometrics/plyometrics.hpp"
 
 int main(int argc, const char* argv[])
 {
-    polyometrics::run_all(argc, argv);
+    plyometrics::run_all(argc, argv);
 }
 ```
 
@@ -48,7 +48,7 @@ NBENCHMARK(allocate_by_make_shared)
     while (loop)
     {
         auto p = std::make_shared<int>(5);
-        polyometrics::escape(p.get());
+        plyometrics::escape(p.get());
     }
 }
 ```
@@ -58,7 +58,7 @@ NBENCHMARK(allocate_by_make_shared)
 If your test requires some initialization, say, generating some dataset, you can simply do that outside the `while` loop, like this:
 
 ```cpp
-auto random_data = polyometrics::random_range(100);
+auto random_data = plyometrics::random_range(100);
 auto v = std::vector<int>{random_data.begin(), random_data.end()};
 
 while (loop)
@@ -67,10 +67,10 @@ while (loop)
 
 Parametric tests
 ----------------
-Tests can be parametrized with two ways: *type* and *number*. Both can be done using `NBENCHMARK_P` macro and a trait called `spec`. `spec` can be defined using `polyometrics::spec`. After defining some types, they are accessible through `loop.type()` function. `loop.type()` constructs current type, forwarding its parameters to the constructor.
+Tests can be parametrized with two ways: *type* and *number*. Both can be done using `NBENCHMARK_P` macro and a trait called `spec`. `spec` can be defined using `plyometrics::spec`. After defining some types, they are accessible through `loop.type()` function. `loop.type()` constructs current type, forwarding its parameters to the constructor.
 
 ```cpp
-NBENCHMARK_P(constructing_stuff, polyometrics::spec::with_types<int, float, Widget>)
+NBENCHMARK_P(constructing_stuff, plyometrics::spec::with_types<int, float, Widget>)
 {
     while (loop)
         loop.type(1);
@@ -79,15 +79,15 @@ NBENCHMARK_P(constructing_stuff, polyometrics::spec::with_types<int, float, Widg
 
 Above example will generate three tests, each with different type.
 
-Another type of parameter is the *number*. It can be constructed using `polyometrics::spec::with_range<>` which takes two parameters: `from` and `to` and uses them to create a geometric range of numbers by multiplying previous value by 2.
+Another type of parameter is the *number*. It can be constructed using `plyometrics::spec::with_range<>` which takes two parameters: `from` and `to` and uses them to create a geometric range of numbers by multiplying previous value by 2.
 
 ```cpp
-NBENCHMARK_P(constructing_sequence_containers, polyometrics::spec::with_types<std::vector<int>, std::list<int>>::with_range<1, 128>)
+NBENCHMARK_P(constructing_sequence_containers, plyometrics::spec::with_types<std::vector<int>, std::list<int>>::with_range<1, 128>)
 {
-    auto sequence_data = polyometrics::sequence_range(loop.number());
+    auto sequence_data = plyometrics::sequence_range(loop.number());
 
     while (loop)
-        polyometrics::use(loop.type(sequence_data.begin(), sequence_data.end()));
+        plyometrics::use(loop.type(sequence_data.begin(), sequence_data.end()));
 }
 ```
 
@@ -108,7 +108,7 @@ constructing_sequence_containers / std::vector<int, std::allocator<int> > [128]:
 
 Generating datasets
 -------------------
-Maybe you noticed `polyometrics::sequence_range` in previous example. It can be used to generate lazy ranges that can be used to feed measured algorithm. It takes `size` as an argument. Similar range is `nbench::random_range` but it gives pseudo-random numbers.
+Maybe you noticed `plyometrics::sequence_range` in previous example. It can be used to generate lazy ranges that can be used to feed measured algorithm. It takes `size` as an argument. Similar range is `nbench::random_range` but it gives pseudo-random numbers.
 
 
 Visualizing parametric tests
@@ -128,7 +128,7 @@ If your benchmark is also type-parameterized, the chart will include all types u
 
 Heap fragmentation
 ------------------
-In the real world, your app's heap might be fragmented. To simulate this, you can use `polyometrics::fragmentize_heap` function. It returns an object which you should keep in the scope of your test.
+In the real world, your app's heap might be fragmented. To simulate this, you can use `plyometrics::fragmentize_heap` function. It returns an object which you should keep in the scope of your test.
 
 ```cpp
 BENCHMARK("iterating").types<
@@ -137,13 +137,13 @@ BENCHMARK("iterating").types<
 >().range(1e6, 1e7) = [](auto& loop)
 {
     // keep it in this scope
-    auto fragmentized = polyometrics::fragmentize_heap();
+    auto fragmentized = plyometrics::fragmentize_heap();
 
-    auto data = polyometrics::sequence_range(loop.number());
+    auto data = plyometrics::sequence_range(loop.number());
 
     while (loop)
         for (auto i : loop.type(data.begin(), data.end()))
-            polyometrics::use(i);
+            plyometrics::use(i);
 };
 ```
 
