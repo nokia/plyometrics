@@ -11,34 +11,25 @@ NBENCHMARK(allocate_by_make_shared)
     }
 }
 
-BENCHMARK("allocate by make_shared") = [](auto& loop)
-{
-    while (loop)
-    {
-        auto p = std::make_shared<int>(5);
-        plyometrics::escape(p.get());
-    }
-};
-
-BENCHMARK("allocate by make_unique") = [](auto& loop)
+NBENCHMARK(allocate_by_make_unique)
 {
     while (loop)
     {
         auto p = std::make_unique<int>(5);
         plyometrics::escape(p.get());
     }
-};
+}
 
-BENCHMARK("allocate by new and shared_ptr") = [](auto& loop)
+NBENCHMARK(allocate_by_new_and_shared_ptr)
 {
     while (loop)
     {
         auto p = std::shared_ptr<int>(new int(5));
         plyometrics::escape(p.get());
     }
-};
+}
 
-BENCHMARK("allocate by malloc") = [](auto& loop)
+NBENCHMARK(allocate_by_malloc)
 {
     while (loop)
     {
@@ -54,7 +45,7 @@ __attribute__((noinline)) void foo_value(std::shared_ptr<int> i)
     plyometrics::use(*i);
 }
 
-BENCHMARK("pass shared_ptr by value") = [](auto& loop)
+NBENCHMARK(pass_shared_ptr_by_value)
 {
     auto p = std::make_shared<int>(5);
 
@@ -72,7 +63,7 @@ __attribute__((noinline)) void foo_reference(const std::shared_ptr<int>& i)
     plyometrics::use(*i);
 }
 
-BENCHMARK("pass shared_ptr by reference") = [](auto& loop)
+NBENCHMARK(pass_shared_ptr_by_reference)
 {
     auto p = std::make_shared<int>(5);
 
