@@ -70,12 +70,6 @@ void run_all(int argc, const char* argv[])
 
 }
 
-#define UNIQUE_NAME_IMPL(prefix, counter)  prefix##counter
-#define UNIQUE_NAME(prefix, counter) UNIQUE_NAME_IMPL(prefix, counter)
-
-#define BENCHMARK(name) auto UNIQUE_NAME(plyometrics_benchmark_, __COUNTER__) = ::plyometrics::benchmark_builder<>{name}
-
-
 #define NBENCHMARK(name) \
     struct name : plyometrics::benchmark_base<name> \
     { \

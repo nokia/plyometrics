@@ -38,7 +38,7 @@ NBENCHMARK(allocate_by_malloc)
         plyometrics::escape(p);
         free(p);
     }
-};
+}
 
 __attribute__((noinline)) void foo_value(std::shared_ptr<int> i)
 {
@@ -56,7 +56,7 @@ NBENCHMARK(pass_shared_ptr_by_value)
         foo_value(p);
         foo_value(p);
     }
-};
+}
 
 __attribute__((noinline)) void foo_reference(const std::shared_ptr<int>& i)
 {
@@ -74,7 +74,7 @@ NBENCHMARK(pass_shared_ptr_by_reference)
         foo_reference(p);
         foo_reference(p);
     }
-};
+}
 
 int main(int argc, const char* argv[])
 {
