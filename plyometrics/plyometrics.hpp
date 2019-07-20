@@ -57,5 +57,4 @@ struct benchmark_builder
     Body _body{};
 };
 
-
 }
