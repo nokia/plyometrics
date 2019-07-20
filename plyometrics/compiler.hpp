@@ -94,7 +94,7 @@ auto fragmentize_heap()
     return heap;
 }
 
-bool cpu_scaling_enabled()
+void warn_on_cpu_freq_scaling()
 {
     std::size_t cpu_number = 0;
 
@@ -105,17 +105,15 @@ bool cpu_scaling_enabled()
         auto f = std::ifstream(path.str());
 
         if (!f)
-            return false;
+            return;
 
         std::string governor;
         f >> governor;
         if (governor != "performance")
-            return true;
+            std::cerr << "cpu" << cpu_number << " is running on '" << governor << "' governor" << std::endl;
 
         cpu_number++;
     }
-
-    return false;
 }
 
 std::string cpu_model()

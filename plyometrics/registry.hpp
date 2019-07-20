@@ -27,20 +27,8 @@ struct registry
 
     void run_all(const options& opts)
     {
-        std::cerr << "CPU: " << cpu_model() << std::endl;
-
-        try
-        {
-            if (cpu_scaling_enabled())
-            {
-                std::cerr << "CPU frequency scaling seems to be enabled, this might affect your benchmarks!\n";
-
-            }
-        }
-        catch (const std::exception& ex)
-        {
-            std::cerr << "Couln't determinate CPU frequency scaling status, reason: " << ex.what() << "\n";
-        }
+        std::cerr << "cpu: " << cpu_model() << std::endl;
+        warn_on_cpu_freq_scaling();
 
         auto printer = make_result_printer(opts);
         auto re = benchmark_regex(opts);
