@@ -55,7 +55,9 @@ struct benchmark_base : public abstract_benchmark
 
     auto name() const -> std::string override
     {
-        return typeid(*this).name();
+        std::stringstream ss;
+        ss << demangle<Crtp>{};
+        return ss.str();
     }
 
 private:
