@@ -2,6 +2,7 @@
 
 #include "cmdline.hpp"
 #include "benchmark.hpp"
+#include "cpu.hpp"
 
 #include <memory>
 #include <iostream>
