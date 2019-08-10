@@ -9,13 +9,6 @@
 namespace plyometrics
 {
 
-struct abstract_benchmark
-{
-    virtual void run(result_printer&) = 0;
-    virtual std::string name() const = 0;
-    virtual ~abstract_benchmark() = default;
-};
-
 template<class Types = std::tuple<nothing>,
          std::size_t From = 1,
          std::size_t To = 1>
@@ -36,6 +29,13 @@ struct default_spec
  * Define parameters for the benchmarks
  */
 using spec = default_spec<>;
+
+struct abstract_benchmark
+{
+    virtual void run(result_printer&) = 0;
+    virtual std::string name() const = 0;
+    virtual ~abstract_benchmark() = default;
+};
 
 template<class Crtp, class Spec = default_spec<>>
 struct benchmark_base : public abstract_benchmark
