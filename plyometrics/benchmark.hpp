@@ -40,14 +40,6 @@ using spec = default_spec<>;
 template<class Crtp, class Spec = default_spec<>>
 struct benchmark_base : public abstract_benchmark
 {
-    void run(result_printer& printer) override
-    {
-        run<typename Spec::types>(
-                printer,
-                std::make_index_sequence<
-                        std::tuple_size<typename Spec::types>::value>{});
-    }
-
     auto name() const -> std::string override
     {
         std::stringstream ss;
@@ -55,16 +47,13 @@ struct benchmark_base : public abstract_benchmark
         return ss.str();
     }
 
-private:
-    template<class Types, std::size_t... Ints>
-    auto run(result_printer& printer, std::index_sequence<Ints...>)
+    void run(result_printer& printer) override
     {
-        swallow(run_with_type<typename std::tuple_element<Ints, Types>::type>(
-                printer)...);
+        visit_each_type<typename Spec::types>(*this, printer);
     }
 
-    template<class Type = nothing>
-    auto run_with_type(result_printer& printer) -> nothing
+    template<class Type>
+    void accept(result_printer& printer)
     {
         for (auto i = Spec::from; i <= Spec::to; i *= 2)
         {
@@ -72,8 +61,6 @@ private:
             static_cast<Crtp*>(this)->body(l);
             printer.print_result(l);
         }
-
-        return nothing{};
     }
 };
 
