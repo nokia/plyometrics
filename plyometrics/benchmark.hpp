@@ -40,11 +40,6 @@ using spec = default_spec<>;
 template<class Crtp, class Spec = default_spec<>>
 struct benchmark_base : public abstract_benchmark
 {
-    static auto construct()
-    {
-        return std::make_unique<Crtp>();
-    }
-
     void run(result_printer& printer) override
     {
         run<typename Spec::types>(

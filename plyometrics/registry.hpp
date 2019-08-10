@@ -64,7 +64,7 @@ void run_all(int argc, const char* argv[])
     { \
         template<class T> __attribute__((noinline)) void body(T&); \
     }; \
-    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{name::construct()}; \
+    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{std::make_unique<name>()}; \
     template<class T> void name::body(T& loop)
 
 /**
@@ -75,6 +75,6 @@ void run_all(int argc, const char* argv[])
     { \
         template<class T> __attribute__((noinline)) void body(T&); \
     }; \
-    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{name::construct()}; \
+    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{std::make_unique<name>()}; \
     template<class T> void name::body(T& loop)
 
