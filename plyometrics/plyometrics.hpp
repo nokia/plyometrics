@@ -26,35 +26,4 @@ struct benchmark_adder
     }
 };
 
-template<class Body = nothing, class... Types>
-struct benchmark_builder
-{
-    template<class... _Types>
-    constexpr auto types()
-    {
-        return benchmark_builder<Body, _Types...>{_name, _range, _body};
-    }
-
-    constexpr auto range(std::size_t from, std::size_t to)
-    {
-        return benchmark_builder<Body, Types...>{_name, {from, to}, _body};
-    }
-
-    template<class F>
-    constexpr auto body(const F& f)
-    {
-        return benchmark_adder{std::make_unique<benchmark_t<F, Types...>>(_name, _range, f)};
-    }
-
-    template<class F>
-    constexpr auto operator=(const F& f)
-    {
-        return benchmark_adder{std::make_unique<benchmark_t<F, Types...>>(_name, _range, f)};
-    }
-
-    const char* _name = "unnamed";
-    range_t _range{};
-    Body _body{};
-};
-
 }
