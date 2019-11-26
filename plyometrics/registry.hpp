@@ -2,6 +2,7 @@
 
 #include "cmdline.hpp"
 #include "benchmark.hpp"
+#include "cpu.hpp"
 
 #include <memory>
 #include <iostream>
@@ -27,20 +28,8 @@ struct registry
 
     void run_all(const options& opts)
     {
-        std::cerr << "CPU: " << cpu_model() << std::endl;
-
-        try
-        {
-            if (cpu_scaling_enabled())
-            {
-                std::cerr << "CPU frequency scaling seems to be enabled, this might affect your benchmarks!\n";
-
-            }
-        }
-        catch (const std::exception& ex)
-        {
-            std::cerr << "Couln't determinate CPU frequency scaling status, reason: " << ex.what() << "\n";
-        }
+        std::cerr << "cpu: " << cpu_model() << std::endl;
+        warn_on_cpu_freq_scaling();
 
         auto printer = make_result_printer(opts);
         auto re = benchmark_regex(opts);
@@ -70,18 +59,12 @@ void run_all(int argc, const char* argv[])
 
 }
 
-#define UNIQUE_NAME_IMPL(prefix, counter)  prefix##counter
-#define UNIQUE_NAME(prefix, counter) UNIQUE_NAME_IMPL(prefix, counter)
-
-#define BENCHMARK(name) auto UNIQUE_NAME(plyometrics_benchmark_, __COUNTER__) = ::plyometrics::benchmark_builder<>{name}
-
-
 #define NBENCHMARK(name) \
     struct name : plyometrics::benchmark_base<name> \
     { \
         template<class T> __attribute__((noinline)) void body(T&); \
     }; \
-    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{name::construct()}; \
+    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{std::make_unique<name>()}; \
     template<class T> void name::body(T& loop)
 
 /**
@@ -92,6 +75,6 @@ void run_all(int argc, const char* argv[])
     { \
         template<class T> __attribute__((noinline)) void body(T&); \
     }; \
-    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{name::construct()}; \
+    auto NBENCH_ADDER_##name = plyometrics::benchmark_adder{std::make_unique<name>()}; \
     template<class T> void name::body(T& loop)
 

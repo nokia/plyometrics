@@ -22,7 +22,7 @@ Note that we're building with `Release` mode, this is needed because you want yo
 
 Installation
 ------------
-`plyometrics` is a header-only library so while the samples are compiled using CMake, you can easily integrate it into you own, customized build system by just copying `nbench` directory and optionaly the `contrib` which is the place for some usefull scripts.
+`plyometrics` is a header-only library so while the samples are compiled using CMake, you can easily integrate it into you own, customized build system by just copying `plyometrics` directory and optionaly the `contrib` which is the place for some usefull scripts.
 
 When you have the code in place, you can include `plyometrics.hpp` header and write the `main` function.
 
@@ -108,7 +108,7 @@ constructing_sequence_containers / std::vector<int, std::allocator<int> > [128]:
 
 Generating datasets
 -------------------
-Maybe you noticed `plyometrics::sequence_range` in previous example. It can be used to generate lazy ranges that can be used to feed measured algorithm. It takes `size` as an argument. Similar range is `nbench::random_range` but it gives pseudo-random numbers.
+Maybe you noticed `plyometrics::sequence_range` in previous example. It can be used to generate lazy ranges that can be used to feed measured algorithm. It takes `size` as an argument. Similar range is `random_range` but it gives pseudo-random numbers.
 
 
 Visualizing parametric tests

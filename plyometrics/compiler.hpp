@@ -1,6 +1,7 @@
 #pragma once
 
-#include "random.hpp"
+#include "ranges.hpp"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -91,37 +92,6 @@ auto fragmentize_heap()
     }
 
     return heap;
-}
-
-bool cpu_scaling_enabled()
-{
-    std::size_t cpu_number = 0;
-
-    while (true)
-    {
-        std::stringstream path;
-        path << "/sys/devices/system/cpu/cpu" << cpu_number << "/cpufreq/scaling_governor";
-        auto f = std::ifstream(path.str());
-
-        if (!f)
-            return false;
-
-        std::string governor;
-        f >> governor;
-        if (governor != "performance")
-            return true;
-
-        cpu_number++;
-    }
-
-    return false;
-}
-
-std::string cpu_model()
-{
-    utsname buf;
-    uname(&buf);
-    return buf.machine;
 }
 
 }
