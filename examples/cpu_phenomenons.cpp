@@ -87,18 +87,36 @@ private:
     int _value;
 };
 
-using atomic_spec =
-        plyometrics::spec::with_types<non_atomic<int>, std::atomic<int>>;
+template<class T>
+struct relaxed_atomic
+{
+    relaxed_atomic(T value) : _value(value)
+    {
+    }
 
-NBENCHMARK_P(read_and_write_to_atomic, atomic_spec)
+    void operator++(int)
+    {
+        _value++;
+    }
+
+    T load() const
+    {
+        return _value.load(std::memory_order_relaxed);
+    }
+
+private:
+    std::atomic<T> _value;
+};
+
+using atomic_spec =
+        plyometrics::spec::with_types<non_atomic<int>, std::atomic<int>, relaxed_atomic<int>>;
+
+NBENCHMARK_P(read_from_atomic, atomic_spec)
 {
     decltype(loop.type()) value(0);
 
     while (loop)
-    {
-        value++;
         plyometrics::use(value.load());
-    }
 }
 
 int main(int argc, const char* argv[])
