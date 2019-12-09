@@ -25,7 +25,7 @@ struct visit_each_type_impl<std::tuple<types...>>
     template<class visitor_type, class... args_types>
     void visit(visitor_type&& visitor, args_types&&... args)
     {
-        swallow([&]{ visitor.template accept<types>(std::forward<args_types>(args)...); return 0; }()...);
+        swallow((visitor.template accept<types>(std::forward<args_types>(args)...), int{})...);
     }
 };
 
