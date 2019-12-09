@@ -22,7 +22,7 @@ Note that we're building with `Release` mode, this is needed because you want yo
 
 Examples library
 ----------------
-This project tries to follow "battery included" philosophy and therefore come with a number of [examples/](examples and documentation). They have two purposes, you can run them in order to quickly assess new hardware or learn about various phenomenons that goes with performance engineering.
+This project tries to follow "battery included" philosophy and therefore come with a number of [eexamples and documentation](examples/). They have two purposes, you can run them in order to quickly assess new hardware or learn about various phenomenons that goes with performance engineering.
 
 
 Installation
