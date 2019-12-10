@@ -28,6 +28,13 @@ struct registry
 
     void run_all(const options& opts)
     {
+        if (opts.has_switch("-l") || opts.has_switch("--list"))
+        {
+            for (auto& b : _benchmarks)
+                std::cout << b->name() << std::endl;
+            return;
+        }
+
         std::cerr << "cpu: " << cpu_model() << std::endl;
         warn_on_cpu_freq_scaling();
 
