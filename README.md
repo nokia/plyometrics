@@ -147,6 +147,8 @@ BENCHMARK("iterating").types<
 };
 ```
 
-See the difference in iterating of various containers when memory is fragmented (right) and where it is not (left).
+See the difference in iterating of various containers when memory is fragmented or not. Note that the charts have different scale.
 
-![alt heap fragmentation](screenshots/fragmentation.png)
+| regular | `fragmentize_heap` applied |
+| --- | --- |
+![](screenshots/iterating-plain.png) | ![](screenshots/iterating-frag.png)
