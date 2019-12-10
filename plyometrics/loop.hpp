@@ -7,7 +7,7 @@
 namespace plyometrics
 {
 
-template<class T = int>
+template<class T>
 struct loop : public result
 {
     explicit loop(std::string name, std::size_t number) : _name(name), number_(number)

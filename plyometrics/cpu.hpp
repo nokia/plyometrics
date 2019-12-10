@@ -1,5 +1,8 @@
 #pragma once
 
+namespace plyometrics
+{
+
 void warn_on_cpu_freq_scaling()
 {
     std::size_t cpu_number = 0;
@@ -29,3 +32,4 @@ std::string cpu_model()
     return buf.machine;
 }
 
+}
