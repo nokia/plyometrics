@@ -6,6 +6,9 @@ target_link_libraries(example_basic plyometrics)
 add_executable(cpu_phenomenons cpu_phenomenons.cpp)
 target_link_libraries(cpu_phenomenons plyometrics pthread)
 
+add_executable(cpu_branch_prediction cpu_branch_prediction.cpp)
+target_link_libraries(cpu_branch_prediction plyometrics)
+
 add_executable(memory_fragmentation memory_fragmentation.cpp)
 target_link_libraries(memory_fragmentation plyometrics)
 
