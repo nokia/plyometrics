@@ -1,4 +1,4 @@
-`plyometrics` is a header-only microbenmarking library targeted for embedded software development.
+`plyometrics` is a header-only microbenmarking library targeted for embedded software development. It also comes with a number of [documented examples](examples/) which you can use to quickly assess new hardware or learn about various phenomenons that goes with performance engineering.
 
 
 Quick start
@@ -18,11 +18,6 @@ Note that we're building with `Release` mode, this is needed because you want yo
 ```
 ./build-release/examples/cpu_phenomenons
 ```
-
-
-Examples library
-----------------
-This project tries to follow "battery included" philosophy and therefore come with a number of [examples and documentation](examples/). They have two purposes, you can run them in order to quickly assess new hardware or learn about various phenomenons that goes with performance engineering.
 
 
 Installation
