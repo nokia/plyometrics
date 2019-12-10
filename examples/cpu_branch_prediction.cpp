@@ -40,6 +40,10 @@ __attribute__((noinline)) void work(const Objects& objects, std::index_sequence<
     swallow((call<Idx>(*objects[Idx]), int{})...);
 }
 
+// Usually you don't want to compare pointers to the objects returned by typeid
+// because it's not guaranteed that they will be always the same for the same type.
+// For example, shared library might generate its own typeinfo. For us this is ok though
+// because the worst thing will be that we miss first condition and do regular call.
 #define HINTED_CALL(object, likely, call) \
     if (__builtin_expect(&typeid(object) == &typeid(likely), true)) \
         static_cast<likely&>(object).call; \
