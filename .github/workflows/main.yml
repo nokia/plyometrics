@@ -13,5 +13,7 @@ jobs:
       run: mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release
     - name: build
       run: cmake --build build
+    - name: run tests
+      run: ./build/tests/nbench_tests
     - name: run examples
       run: ./build/examples/example_basic
