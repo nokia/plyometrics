@@ -6,7 +6,7 @@
 #include <unordered_set>
 #include <vector>
 
-using containers_spec = plyometrics::spec::with_range<1, 128>;
+using containers_spec = plyometrics::spec::with_range<1, 2, 10>;
 using associative_containers_spec = containers_spec::with_types<std::map<int, int>, std::unordered_map<int, int>>;
 using sequence_containers_spec = containers_spec::with_types<std::vector<int>, std::list<int>, std::set<int>, std::unordered_set<int>>;
 

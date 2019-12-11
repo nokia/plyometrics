@@ -10,19 +10,17 @@ namespace plyometrics
 {
 
 template<class Types = std::tuple<nothing>,
-         std::size_t From = 1,
-         std::size_t To = 1>
+         class Sequence = std::index_sequence<1>>
 struct default_spec
 {
     using types = Types;
-    static constexpr std::size_t from = From;
-    static constexpr std::size_t to = To;
+    using range = Sequence;
 
     template<class... T>
-    using with_types = default_spec<std::tuple<T...>, from, to>;
+    using with_types = default_spec<std::tuple<T...>, Sequence>;
 
-    template<std::size_t F, std::size_t T>
-    using with_range = default_spec<types, F, T>;
+    template<std::size_t Base, std::size_t Multiplier, std::size_t Max>
+    using with_range = default_spec<types, geometric_sequence<Base, Multiplier, Max>>;
 };
 
 /**
@@ -40,6 +38,12 @@ struct abstract_benchmark
 template<class Crtp, class Spec = default_spec<>>
 struct benchmark_base : public abstract_benchmark
 {
+    template<class T>
+    struct forward_type
+    {
+        using type = T;
+    };
+
     auto name() const -> std::string override
     {
         std::stringstream ss;
@@ -55,12 +59,15 @@ struct benchmark_base : public abstract_benchmark
     template<class Type>
     void accept(result_printer& printer)
     {
-        for (auto i = Spec::from; i <= Spec::to; i *= 2)
-        {
-            auto l = loop<Type>{ name(), i };
-            static_cast<Crtp*>(this)->body(l);
-            printer.print_result(l);
-        }
+        visit_each_type<typename Spec::range>(*this, printer, forward_type<Type>{});
+    }
+
+    template<std::size_t N, class T>
+    void accept(result_printer& printer, T)
+    {
+        auto l = loop<typename T::type>{name(), N};
+        static_cast<Crtp*>(this)->body(l);
+        printer.print_result(l);
     }
 };
 
