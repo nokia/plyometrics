@@ -7,7 +7,7 @@
 
 NBENCHMARK_P(iterating_over_various_containers_with_fragmented_memory,
              plyometrics::spec::with_types<std::vector<int>, std::list<int>, std::set<int>, std::unordered_set<int>>
-                         ::with_range<1, 512>)
+                         ::with_range<1, 2, 8>)
 {
     auto frag = plyometrics::fragmentize_heap();
     auto data = plyometrics::sequence_range(loop.number());
@@ -20,7 +20,7 @@ NBENCHMARK_P(iterating_over_various_containers_with_fragmented_memory,
 
 NBENCHMARK_P(iterating_over_various_containers,
              plyometrics::spec::with_types<std::vector<int>, std::list<int>, std::set<int>, std::unordered_set<int>>
-                         ::with_range<1, 512>)
+                         ::with_range<1, 2, 8>)
 {
     auto data = plyometrics::sequence_range(loop.number());
     auto container = loop.type(data.begin(), data.end());
