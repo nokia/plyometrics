@@ -60,7 +60,7 @@ TEST_CASE("append index_sequence")
 {
     using base = std::index_sequence<1, 2>;
     using expected = std::index_sequence<1, 2, 3>;
-    using computed = append_to_index_sequence<base, 3>::type;
+    using computed = details::append_to_index_sequence<base, 3>::type;
     CHECK(demangle<expected>() == demangle<computed>());
 }
 
