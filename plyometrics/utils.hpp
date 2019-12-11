@@ -52,26 +52,26 @@ struct append_to_index_sequence<std::index_sequence<Idx...>, V>
     using type = std::index_sequence<Idx..., V>;
 };
 
-template<bool Last, std::size_t Current, std::size_t To, class Is>
+template<std::size_t Max, std::size_t Current, std::size_t Multiplier, class Is>
 struct power_of_2_sequence_impl
 {
     using type = typename power_of_2_sequence_impl<
-        (Current > To),
-        Current * 2,
-        To,
+        Max - 1,
+        Current * Multiplier,
+        Multiplier,
         typename append_to_index_sequence<Is, Current>::type
     >::type;
 };
 
-template<std::size_t Current, std::size_t To, class Is>
-struct power_of_2_sequence_impl<true, Current, To, Is>
+template<std::size_t Current, std::size_t Multiplier, class Is>
+struct power_of_2_sequence_impl<0, Current, Multiplier, Is>
 {
     using type = Is;
 };
 
 } // namespace details
 
-template<std::size_t To>
-using power_of_2_sequence = typename details::power_of_2_sequence_impl<false, 1, To, std::index_sequence<>>::type;
+template<std::size_t Base, std::size_t Multiplier, std::size_t Max> 
+using power_of_2_sequence = typename details::power_of_2_sequence_impl<Max, Base, Multiplier, std::index_sequence<>>::type;
 
 }

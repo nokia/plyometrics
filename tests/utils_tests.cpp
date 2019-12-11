@@ -66,7 +66,14 @@ TEST_CASE("append index_sequence")
 
 TEST_CASE("static geometric range")
 {
-    using expected = std::index_sequence<1, 2, 4, 8, 16>;
-    using computed = power_of_2_sequence<10>;
+    using expected = std::index_sequence<1, 2, 4, 8>;
+    using computed = power_of_2_sequence<1, 2, 4>;
+    CHECK(demangle<expected>() == demangle<computed>());
+}
+
+TEST_CASE("static geometric range with minimum value")
+{
+    using expected = std::index_sequence<1, 10, 100, 1000>;
+    using computed = power_of_2_sequence<1, 10, 4>;
     CHECK(demangle<expected>() == demangle<computed>());
 }
