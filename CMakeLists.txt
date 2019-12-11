@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 option(PLYOMETRICS_BUILD_TESTS "build the unit tests" OFF)
 
 if(PLYOMETRICS_BUILD_TESTS)
+    enable_testing()
     add_subdirectory(tests)
 endif()
 
