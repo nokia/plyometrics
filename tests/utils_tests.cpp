@@ -74,9 +74,9 @@ TEST_CASE("append index_sequence")
 }
 
 template<bool Last, std::size_t Current, std::size_t To, class Is>
-struct geometric_range_impl
+struct power_of_2_sequence_impl
 {
-    using type = typename geometric_range_impl<
+    using type = typename power_of_2_sequence_impl<
         (Current > To),
         Current * 2,
         To,
@@ -85,17 +85,17 @@ struct geometric_range_impl
 };
 
 template<std::size_t Current, std::size_t To, class Is>
-struct geometric_range_impl<true, Current, To, Is>
+struct power_of_2_sequence_impl<true, Current, To, Is>
 {
     using type = Is;
 };
 
 template<std::size_t To>
-using geometric_range = typename geometric_range_impl<false, 1, To, std::index_sequence<>>::type;
+using power_of_2_sequence = typename power_of_2_sequence_impl<false, 1, To, std::index_sequence<>>::type;
 
 TEST_CASE("static geometric range")
 {
     using expected = std::index_sequence<1, 2, 4, 8, 16>;
-    using computed = geometric_range<10>;
+    using computed = power_of_2_sequence<10>;
     CHECK(demangle<expected>() == demangle<computed>());
 }
