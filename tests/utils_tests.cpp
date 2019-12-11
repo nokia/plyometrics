@@ -56,15 +56,6 @@ std::string demangle()
     return ret;
 }
 
-template<class, std::size_t>
-struct append_to_index_sequence;
-
-template<std::size_t V, std::size_t... Idx>
-struct append_to_index_sequence<std::index_sequence<Idx...>, V>
-{
-    using type = std::index_sequence<Idx..., V>;
-};
-
 TEST_CASE("append index_sequence")
 {
     using base = std::index_sequence<1, 2>;
@@ -72,26 +63,6 @@ TEST_CASE("append index_sequence")
     using computed = append_to_index_sequence<base, 3>::type;
     CHECK(demangle<expected>() == demangle<computed>());
 }
-
-template<bool Last, std::size_t Current, std::size_t To, class Is>
-struct power_of_2_sequence_impl
-{
-    using type = typename power_of_2_sequence_impl<
-        (Current > To),
-        Current * 2,
-        To,
-        typename append_to_index_sequence<Is, Current>::type
-    >::type;
-};
-
-template<std::size_t Current, std::size_t To, class Is>
-struct power_of_2_sequence_impl<true, Current, To, Is>
-{
-    using type = Is;
-};
-
-template<std::size_t To>
-using power_of_2_sequence = typename power_of_2_sequence_impl<false, 1, To, std::index_sequence<>>::type;
 
 TEST_CASE("static geometric range")
 {

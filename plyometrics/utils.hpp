@@ -40,4 +40,38 @@ void visit_each_type(visitor_type&& visitor, args_types&&... args)
     impl.visit(visitor, std::forward<args_types>(args)...);
 }
 
+namespace details
+{
+
+template<class, std::size_t>
+struct append_to_index_sequence;
+
+template<std::size_t V, std::size_t... Idx>
+struct append_to_index_sequence<std::index_sequence<Idx...>, V>
+{
+    using type = std::index_sequence<Idx..., V>;
+};
+
+template<bool Last, std::size_t Current, std::size_t To, class Is>
+struct power_of_2_sequence_impl
+{
+    using type = typename power_of_2_sequence_impl<
+        (Current > To),
+        Current * 2,
+        To,
+        typename append_to_index_sequence<Is, Current>::type
+    >::type;
+};
+
+template<std::size_t Current, std::size_t To, class Is>
+struct power_of_2_sequence_impl<true, Current, To, Is>
+{
+    using type = Is;
+};
+
+} // namespace details
+
+template<std::size_t To>
+using power_of_2_sequence = typename details::power_of_2_sequence_impl<false, 1, To, std::index_sequence<>>::type;
+
 }
