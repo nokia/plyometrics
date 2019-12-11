@@ -3,7 +3,7 @@
 #include <atomic>
 #include <thread>
 
-using cache_spec = plyometrics::spec::with_range<1, 100000>;
+using cache_spec = plyometrics::spec::with_range<1, 2, 24>;
 
 NBENCHMARK_P(cache, cache_spec)
 {
@@ -44,7 +44,7 @@ auto make_n_threads(std::size_t n, F f)
 
 using false_sharing_spec = plyometrics::spec::with_types<
         two_aligned_variables<1>,
-        two_aligned_variables<64>>::with_range<1, 64>;
+        two_aligned_variables<64>>::with_range<1, 2, 5>;
 
 NBENCHMARK_P(false_sharing, false_sharing_spec)
 {
