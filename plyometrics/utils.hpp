@@ -29,6 +29,16 @@ struct visit_each_type_impl<std::tuple<types...>>
     }
 };
 
+template<std::size_t... Vals>
+struct visit_each_type_impl<std::index_sequence<Vals...>>
+{
+    template<class visitor_type, class... args_types>
+    void visit(visitor_type&& visitor, args_types&&... args)
+    {
+        swallow((visitor.template accept<Vals>(std::forward<args_types>(args)...), int{})...);
+    }
+};
+
 /**
  * Calls visitor_type::visit method for each type in tuple's type
  * without constructing anything.
@@ -53,9 +63,9 @@ struct append_to_index_sequence<std::index_sequence<Idx...>, V>
 };
 
 template<std::size_t Max, std::size_t Current, std::size_t Multiplier, class Is>
-struct power_of_2_sequence_impl
+struct geometric_sequence_impl
 {
-    using type = typename power_of_2_sequence_impl<
+    using type = typename geometric_sequence_impl<
         Max - 1,
         Current * Multiplier,
         Multiplier,
@@ -64,7 +74,7 @@ struct power_of_2_sequence_impl
 };
 
 template<std::size_t Current, std::size_t Multiplier, class Is>
-struct power_of_2_sequence_impl<0, Current, Multiplier, Is>
+struct geometric_sequence_impl<0, Current, Multiplier, Is>
 {
     using type = Is;
 };
@@ -72,6 +82,6 @@ struct power_of_2_sequence_impl<0, Current, Multiplier, Is>
 } // namespace details
 
 template<std::size_t Base, std::size_t Multiplier, std::size_t Max> 
-using power_of_2_sequence = typename details::power_of_2_sequence_impl<Max, Base, Multiplier, std::index_sequence<>>::type;
+using geometric_sequence = typename details::geometric_sequence_impl<Max, Base, Multiplier, std::index_sequence<>>::type;
 
 }

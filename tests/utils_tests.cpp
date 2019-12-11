@@ -2,6 +2,7 @@
 
 #include "plyometrics/utils.hpp"
 
+#include <set>
 #include <utility>
 #include <type_traits>
 #include <cxxabi.h>
@@ -42,6 +43,26 @@ TEST_CASE("tuple foreach")
     CHECK(visitor.got_int);
     CHECK(visitor.got_float);
     CHECK(visitor.got_char);
+}
+
+struct sequence_visitor
+{
+    std::set<std::size_t> visited;
+
+    template<std::size_t V> void accept()
+    {
+        visited.insert(V);
+    }
+};
+
+TEST_CASE("index_sequence foreach")
+{
+    using seq = std::index_sequence<1, 2, 3>;
+    sequence_visitor visitor;
+
+    visit_each_type<seq>(visitor);
+
+    CHECK(std::set<std::size_t>{1, 2, 3} == visitor.visited);
 }
 
 // static stuff tests
