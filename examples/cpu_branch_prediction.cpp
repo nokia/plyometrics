@@ -62,20 +62,22 @@ __attribute__((noinline)) void hinted_work(const Objects& objects, std::index_se
     swallow((hinted_call<Idx, fancy_class>(*objects[Idx]), int{})...);
 } 
 
-NBENCHMARK(dynamic_branch_prediction)
+using branch_predictor_spec = plyometrics::spec::with_range<1, 2, 14>;
+
+NBENCHMARK_P(dynamic_branch_prediction, branch_predictor_spec)
 {
-    auto objects = create_objects(complexity);
+    auto objects = create_objects(loop.number());
 
     while (loop)
-        work(objects, std::make_index_sequence<complexity>());
+        work(objects, std::make_index_sequence<loop.cnumber()>());
 }
 
-NBENCHMARK(hinted_branch_prediction)
+NBENCHMARK_P(hinted_branch_prediction, branch_predictor_spec)
 {
-    auto objects = create_objects(complexity);
+    auto objects = create_objects(loop.number());
 
     while (loop)
-        hinted_work(objects, std::make_index_sequence<complexity>());
+        hinted_work(objects, std::make_index_sequence<loop.cnumber()>());
 }
 
 int main(int argc, const char* argv[])

@@ -32,7 +32,12 @@ struct loop : public result
         return (_end - _start) / _iterations;
     }
 
-    constexpr auto number() const -> std::size_t override
+    auto number() const -> std::size_t override
+    {
+        return N;
+    }
+
+    static constexpr auto cnumber() -> std::size_t
     {
         return N;
     }
