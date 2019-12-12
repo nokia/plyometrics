@@ -41,22 +41,24 @@ struct regular
     }
 };
 
-// Usually you don't want to compare pointers to the objects returned by typeid
-// because it's not guaranteed that they will be always the same for the same type.
-// For example, shared library might generate its own typeinfo. For us this is ok though
-// because the worst thing will be that we miss first condition and do regular call.
-#define HINTED_CALL(object, likely, call) \
-    if (__builtin_expect(&typeid(object) == &typeid(likely), true)) \
-        static_cast<likely&>(object).call; \
-    else \
-        object.call; \
-
 struct hinted
 {
     template<std::size_t, class Likely>
     __attribute__((noinline)) static void hinted_call(fancy_abstract_class& object)
     {
+        // Usually you don't want to compare pointers to the objects returned by typeid
+        // because it's not guaranteed that they will be always the same for the same type.
+        // For example, shared library might generate its own typeinfo. For us this is ok though
+        // because the worst thing will be that we miss first condition and do regular call.
+        #define HINTED_CALL(object, likely, call) \
+            if (__builtin_expect(&typeid(object) == &typeid(likely), true)) \
+                static_cast<likely&>(object).call; \
+            else \
+                object.call; \
+
         HINTED_CALL(object, Likely, foo());
+
+        #undef HINTED_CALL
     }
 
     template<class Objects, std::size_t... Idx>
