@@ -65,7 +65,7 @@ struct benchmark_base : public abstract_benchmark
     template<std::size_t N, class ForwardedType>
     void accept(result_printer& printer, ForwardedType)
     {
-        auto l = loop<typename ForwardedType::type>{name(), N};
+        auto l = loop<N, typename ForwardedType::type>{name(), N};
         static_cast<Crtp*>(this)->body(l);
         printer.print_result(l);
     }

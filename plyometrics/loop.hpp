@@ -7,7 +7,7 @@
 namespace plyometrics
 {
 
-template<class T>
+template<std::size_t N, class T>
 struct loop : public result
 {
     explicit loop(std::string name, std::size_t number) : _name(name), number_(number)
@@ -32,9 +32,9 @@ struct loop : public result
         return (_end - _start) / _iterations;
     }
 
-    auto number() const -> std::size_t override
+    constexpr auto number() const -> std::size_t override
     {
-        return number_;
+        return N;
     }
 
     template<class... Args>
