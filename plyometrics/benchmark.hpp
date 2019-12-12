@@ -19,8 +19,14 @@ struct default_spec
     template<class... T>
     using with_types = default_spec<std::tuple<T...>, Sequence>;
 
-    template<std::size_t Base, std::size_t Multiplier, std::size_t Max>
-    using with_range = default_spec<types, geometric_sequence<Base, Multiplier, Max>>;
+    /**
+     * Parametrize with geometric range of integers.
+     * @tparam Base first number of the sequence
+     * @tparam Multiplier each sequence number is previous one multiplied by this value
+     * @tparam Length total length of the sequence
+     */
+    template<std::size_t Base, std::size_t Multiplier, std::size_t Length>
+    using with_range = default_spec<types, geometric_sequence<Base, Multiplier, Length>>;
 };
 
 /**
