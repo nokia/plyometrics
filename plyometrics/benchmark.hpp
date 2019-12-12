@@ -62,10 +62,10 @@ struct benchmark_base : public abstract_benchmark
         visit_each_type<typename Spec::range>(*this, printer, forward_type<Type>{});
     }
 
-    template<std::size_t N, class T>
-    void accept(result_printer& printer, T)
+    template<std::size_t N, class ForwardedType>
+    void accept(result_printer& printer, ForwardedType)
     {
-        auto l = loop<typename T::type>{name(), N};
+        auto l = loop<typename ForwardedType::type>{name(), N};
         static_cast<Crtp*>(this)->body(l);
         printer.print_result(l);
     }
