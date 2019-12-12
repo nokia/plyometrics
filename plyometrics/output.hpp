@@ -2,6 +2,7 @@
 
 #include "cmdline.hpp"
 #include "result.hpp"
+#include "cpu.hpp"
 
 #include <chrono>
 #include <ostream>
@@ -87,7 +88,8 @@ struct json_printer : public result_printer
                 << "\"name\": \"" << res.name() << "\", "
                 << "\"type\": \"" << res.type_name() << "\", "
                 << "\"number\": " << res.number() << ", "
-                << "\"time\": " << res.iteration_time().count()
+                << "\"time\": " << res.iteration_time().count() << ", "
+                << "\"cpu_model\": \"" << cpu_model() << '"'
                 << "}\n";
 
         std::cerr << '.';
