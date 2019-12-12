@@ -19,13 +19,14 @@ def sorted_by_key(dic):
     return sorted(dic, key=operator.itemgetter(0))
 
 
-def visualize(grouped_data, output_directory=None, overwrite=False):
+def visualize(grouped_data, cpu_model, output_directory=None, overwrite=False):
     plt.style.use('ggplot')
     plt.rcParams["figure.figsize"] = (10,8)
 
     for name, data in grouped_data.items():
         plt.clf()
         plt.title(name)
+        plt.suptitle(f'cpu: {cpu_model}')
         for type_name, results in sorted_by_key(data.items()):
             x = [sample['number'] for sample in results]
             y = [sample['time'] for sample in results]
@@ -44,6 +45,12 @@ def visualize(grouped_data, output_directory=None, overwrite=False):
                 print('{} already exists, use -f to force overwrite'.format(filename))
 
 
+def cpu_model(data):
+    # assuming they a
+    for b in data:
+        return b["cpu_model"]
+
+
 def group(data):
     benchmarks = defaultdict(lambda: defaultdict(list))
     for b in data:
@@ -59,7 +66,7 @@ def main():
 
     try:
         data = json.load(sys.stdin)
-        visualize(group(data), output_directory=args.output_directory, overwrite=args.overwrite)
+        visualize(group(data), cpu_model=cpu_model(data), output_directory=args.output_directory, overwrite=args.overwrite)
     except json.decoder.JSONDecodeError as e:
         print(e)
         print("Did you forgot -x switch?")
