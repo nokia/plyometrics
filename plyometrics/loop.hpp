@@ -10,7 +10,7 @@ namespace plyometrics
 template<std::size_t N, class T>
 struct loop : public result
 {
-    explicit loop(std::string name, std::size_t number) : _name(name), number_(number)
+    explicit loop(std::string name) : _name(name)
     {
     }
 
@@ -65,7 +65,6 @@ private:
     clock::time_point _start = clock::now();
     clock::time_point _end;
     std::size_t _iterations = 0;
-    std::size_t number_;
     bool _started = false;
 };
 
