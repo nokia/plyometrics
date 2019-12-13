@@ -41,11 +41,6 @@ struct loop
         return N;
     }
 
-    static constexpr auto cnumber() -> std::size_t
-    {
-        return N;
-    }
-
     template<class... Args>
     auto type(Args&&... args) const -> T
     {

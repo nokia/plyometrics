@@ -76,7 +76,7 @@ NBENCHMARK_P(dynamic_branch_prediction, branch_predictor_spec)
     auto work = loop.type();
 
     while (loop)
-        work.work(objects, std::make_index_sequence<loop.cnumber()>());
+        work.work(objects, std::make_index_sequence<loop.number()>());
 }
 
 int main(int argc, const char* argv[])
