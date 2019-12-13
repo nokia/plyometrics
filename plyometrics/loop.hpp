@@ -8,7 +8,7 @@ namespace plyometrics
 {
 
 template<std::size_t N, class T>
-struct loop : public result
+struct loop
 {
     explicit loop(std::string name) : _name(name)
     {
@@ -27,12 +27,16 @@ struct loop : public result
         return _end - _start < std::chrono::seconds{1};
     }
 
-    auto iteration_time() const -> clock::duration override
+    auto result() const
     {
-        return (_end - _start) / _iterations;
+        result_t r;
+        r.iteration_time = (_end - _start) / _iterations;
+        r.name = _name;
+        r.number = N;
+        return r;
     }
 
-    auto number() const -> std::size_t override
+    static constexpr auto number() -> std::size_t
     {
         return N;
     }
@@ -48,19 +52,14 @@ struct loop : public result
         return T{std::forward<Args>(args)...};
     }
 
-    auto type_name() const -> std::string override
+private:
+    auto type_name() const -> std::string
     {
         std::stringstream ss;
         ss << demangle<T>{};
         return ss.str();
     }
 
-    auto name() const -> std::string override
-    {
-        return _name;
-    }
-
-private:
     std::string _name;
     clock::time_point _start = clock::now();
     clock::time_point _end;

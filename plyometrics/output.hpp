@@ -48,18 +48,18 @@ std::ostream& operator<<(std::ostream& os, demangle<T>)
 
 struct result_printer
 {
-    virtual void print_result(const result&) = 0;
+    virtual void print_result(const result_t&) = 0;
     virtual ~result_printer() = default;
 };
 
 struct printer_for_humans : public result_printer
 {
-    void print_result(const result& res) override
+    void print_result(const result_t& res) override
     {
-        std::cout << res.name() << " / "
-                  << res.type_name()
-                  << " [" << res.number() << "]"
-                  << ": " << humanize(res.iteration_time()) << std::endl;
+        std::cout << res.name << " / "
+                  << res.type_name
+                  << " [" << res.number << "]"
+                  << ": " << humanize(res.iteration_time) << std::endl;
     }
 
     ~printer_for_humans() override
@@ -76,7 +76,7 @@ struct json_printer : public result_printer
         std::cout << '[' << std::endl;
     }
 
-    void print_result(const result& res) override
+    void print_result(const result_t& res) override
     {
         auto buf = _buffer.str();
         _buffer = std::stringstream{};
@@ -85,10 +85,10 @@ struct json_printer : public result_printer
             std::cout << buf << ", \n";
 
         _buffer << "{"
-                << "\"name\": \"" << res.name() << "\", "
-                << "\"type\": \"" << res.type_name() << "\", "
-                << "\"number\": " << res.number() << ", "
-                << "\"time\": " << res.iteration_time().count() << ", "
+                << "\"name\": \"" << res.name << "\", "
+                << "\"type\": \"" << res.type_name << "\", "
+                << "\"number\": " << res.number << ", "
+                << "\"time\": " << res.iteration_time.count() << ", "
                 << "\"cpu_model\": \"" << cpu_model() << '"'
                 << "}\n";
 

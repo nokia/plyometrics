@@ -7,14 +7,12 @@
 namespace plyometrics
 {
 
-struct result
+struct result_t
 {
-    virtual auto iteration_time() const -> clock::duration = 0;
-    virtual auto number() const -> std::size_t = 0;
-    virtual auto type_name() const -> std::string = 0;
-    virtual auto name() const -> std::string = 0;
-
-    virtual ~result() = default;
+    clock::duration iteration_time;
+    std::size_t number;
+    std::string type_name;
+    std::string name;
 };
 
 }

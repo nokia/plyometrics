@@ -73,7 +73,7 @@ struct benchmark_base : public abstract_benchmark
     {
         auto l = loop<N, typename ForwardedType::type>{name()};
         static_cast<Crtp*>(this)->body(l);
-        printer.print_result(l);
+        printer.print_result(l.result());
     }
 };
 
