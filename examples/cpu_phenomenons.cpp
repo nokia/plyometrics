@@ -119,6 +119,42 @@ NBENCHMARK_P(read_from_atomic, atomic_spec)
         plyometrics::use(value.load());
 }
 
+NBENCHMARK(dependent_computation)
+{
+    int a = 10, b = 3, c = 1;
+
+    plyometrics::escape(&a);
+    plyometrics::escape(&b);
+    plyometrics::escape(&c);
+
+    while (loop)
+    {
+        int r = a % b;
+        plyometrics::escape(&r);
+
+        int j = r % c;
+        plyometrics::escape(&j);
+    }
+}
+
+NBENCHMARK(independent_computation)
+{
+    int a = 10, b = 3, c = 1;
+
+    plyometrics::escape(&a);
+    plyometrics::escape(&b);
+    plyometrics::escape(&c);
+
+    while (loop)
+    {
+        int r = a % b;
+        plyometrics::escape(&r);
+
+        int j = b % c;
+        plyometrics::escape(&j);
+    }
+}
+
 int main(int argc, const char* argv[])
 {
     plyometrics::run_all(argc, argv);

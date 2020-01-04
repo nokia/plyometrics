@@ -60,3 +60,8 @@ This helps with two things:
  - compiler can do inlining (which will then enable other imptimizations)
 
 The caveat is that the code will probably be bigger which will cause higher load of the _instruction cache_ so as always, **you should measure** your particular system before deploying this solution.
+
+
+Out-of-order execution
+----------------------
+`cpu_phenmenons.cpp` contains two benchmarks which together show _out-of-order execution_ capability of the CPU. Second test is expected to be faster because second modulo operation doesn't depend on any previously calculated value therefore it can be scheduled in separate pipeline.
