@@ -64,4 +64,4 @@ The caveat is that the code will probably be bigger which will cause higher load
 
 Out-of-order execution
 ----------------------
-`cpu_phenmenons.cpp` contains two benchmarks which together show _out-of-order execution_ capability of the CPU. Second test is expected to be faster because second modulo operation doesn't depend on any previously calculated value therefore it can be scheduled in separate pipeline.
+`cpu_phenmenons.cpp` contains two benchmarks which together show _out-of-order execution_ capability of the CPU. Second test is expected to be faster because second modulo operation doesn't depend on any previously calculated value therefore it can be reordered or overlapped with each other.
