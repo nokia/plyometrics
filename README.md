@@ -152,3 +152,8 @@ See the difference in iterating of various containers when memory is fragmented 
 | regular | `fragmentize_heap` applied |
 | --- | --- |
 ![](screenshots/iterating-plain.png) | ![](screenshots/iterating-frag.png)
+
+
+## License
+
+This project is licensed under the BSD-3-Clause license - see the [LICENSE](https://github.com/nokia/plyometrics/blob/master/LICENSE).
